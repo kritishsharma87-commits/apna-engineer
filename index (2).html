@@ -1,0 +1,2262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apna Engineer — Intelligence, Reimagined</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:       #000000;
+      --near-black:  #0a0a0f;
+      --surface-1:   #0d0d14;
+      --surface-2:   #12121c;
+      --surface-3:   #1a1a28;
+      --border:      rgba(255, 39, 39, 0.07);
+      --border-glow: rgba(120,100,255,0.3);
+      --text-primary:   #f5f5f7;
+      --text-secondary: rgba(245,245,247,0.6);
+      --text-tertiary:  rgba(245,245,247,0.35);
+      --accent-purple: #7b5ea7;
+      --accent-blue:   #3a86ff;
+      --accent-pink:   #e040fb;
+      --glow-purple:   rgba(123,94,167,0.6);
+      --glow-blue:     rgba(58,134,255,0.5);
+      --radius-sm:  8px;
+      --radius-md:  16px;
+      --radius-lg:  24px;
+      --radius-xl:  40px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--black);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+
+    /* ─── SELECTION ─── */
+    ::selection { background: rgba(123,94,167,0.4); color: #fff; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 52px;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.3s ease;
+    }
+
+    .nav-logo {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .nav-logo span {
+      background: linear-gradient(90deg, #a78bfa, #60a5fa, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+      letter-spacing: 0.1px;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .nav-cta {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 7px 18px;
+      border-radius: 100px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+    .nav-cta:hover {
+      background: rgba(255,255,255,0.18);
+      border-color: rgba(255,255,255,0.25);
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(ellipse at center,
+        rgba(123,94,167,0.18) 0%,
+        rgba(58,134,255,0.1) 35%,
+        transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+      animation: breathe 6s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+      50%       { transform: translate(-50%,-50%) scale(1.08); opacity: 0.85; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 840px;
+      padding: 0 24px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 28px;
+      padding: 6px 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      background: rgba(255,255,255,0.04);
+    }
+    .hero-eyebrow .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #a78bfa;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 400;
+      line-height: 1.04;
+      letter-spacing: -2px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .hero-title-gradient {
+      background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 40%, #f472b6 80%, #a78bfa 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-shift 4s ease infinite;
+    }
+
+    @keyframes gradient-shift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .hero-subtitle {
+      font-size: clamp(17px, 2.2vw, 21px);
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 48px;
+      letter-spacing: -0.2px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      font-size: 15px;
+      font-weight: 500;
+      color: #000;
+      background: linear-gradient(135deg, #c4b5fd, #93c5fd, #f9a8d4);
+      padding: 14px 32px;
+      border-radius: 100px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: -0.2px;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 0.2s;
+    }
+    .btn-primary:hover::before { background: rgba(255,255,255,0.15); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 60px rgba(167,139,250,0.4); }
+
+    .btn-secondary {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-primary);
+      background: transparent;
+      padding: 14px 32px;
+      border-radius: 100px;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: -0.2px;
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.3);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.4;
+      animation: fade-bounce 2s ease-in-out infinite;
+    }
+    @keyframes fade-bounce {
+      0%,100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+      50%      { opacity: 0.7; transform: translateX(-50%) translateY(6px); }
+    }
+    .hero-scroll-hint span { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-tertiary); }
+    .scroll-arrow { width: 1px; height: 36px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.4)); }
+
+    /* ─── SECTION SHARED ─── */
+    section { padding: 140px 40px; }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #a78bfa;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+    }
+
+    .section-body {
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.72;
+      color: var(--text-secondary);
+      max-width: 580px;
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+
+    /* ─── INTRO / TAGLINE ─── */
+    #intro {
+      padding: 160px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #intro::before {
+      content: '';
+      position: absolute;
+      top: -200px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(ellipse, rgba(58,134,255,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .intro-headline {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(36px, 5.5vw, 72px);
+      font-weight: 400;
+      line-height: 1.12;
+      letter-spacing: -2px;
+      max-width: 900px;
+      margin: 0 auto 32px;
+      color: var(--text-primary);
+    }
+    .intro-headline em {
+      font-style: italic;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .intro-sub {
+      font-size: 19px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ─── STATS BAR ─── */
+    #stats {
+      padding: 0 40px 120px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .stat-item {
+      background: var(--surface-1);
+      padding: 48px 40px;
+      transition: background 0.3s;
+    }
+    .stat-item:hover { background: var(--surface-2); }
+    .stat-number {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 52px;
+      font-weight: 400;
+      letter-spacing: -2px;
+      line-height: 1;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      letter-spacing: 0.2px;
+      line-height: 1.5;
+    }
+
+    /* ─── FEATURES GRID ─── */
+    #features {
+      padding: 140px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .features-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: end;
+      margin-bottom: 80px;
+    }
+    .features-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .feature-card {
+      background: var(--surface-1);
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s ease, transform 0.3s ease;
+      cursor: default;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-glow), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .feature-card:hover { background: var(--surface-2); }
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-card.featured {
+      grid-column: span 2;
+      background: var(--surface-2);
+    }
+    .feature-card.featured::after {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(ellipse, rgba(123,94,167,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .feature-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      background: var(--surface-3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+      font-size: 22px;
+      transition: all 0.3s;
+    }
+    .feature-card:hover .feature-icon {
+      border-color: rgba(167,139,250,0.3);
+      background: rgba(167,139,250,0.08);
+    }
+
+    .feature-name {
+      font-size: 19px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+      letter-spacing: -0.3px;
+    }
+    .feature-desc {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 1.68;
+      color: var(--text-secondary);
+    }
+
+    /* ─── ARCHITECTURE / HOW IT WORKS ─── */
+    #how {
+      padding: 140px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .how-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: center;
+      margin-top: 80px;
+    }
+    .how-visual {
+      position: relative;
+      perspective: 1200px;
+    }
+    .model-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+      transform: rotateY(-6deg) rotateX(3deg);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+      box-shadow:
+        0 40px 80px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(255,255,255,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .model-card:hover {
+      transform: rotateY(-2deg) rotateX(1deg) translateZ(20px);
+      box-shadow:
+        0 60px 100px rgba(0,0,0,0.7),
+        0 0 0 1px rgba(167,139,250,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .model-card::before {
+      content: '';
+      position: absolute;
+      top: -100px; left: -100px;
+      width: 300px; height: 300px;
+      background: radial-gradient(ellipse, rgba(123,94,167,0.2) 0%, transparent 70%);
+    }
+    .model-card::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; right: -80px;
+      width: 250px; height: 250px;
+      background: radial-gradient(ellipse, rgba(58,134,255,0.15) 0%, transparent 70%);
+    }
+    .model-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 20px;
+    }
+    .model-name-display {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 36px;
+      font-weight: 400;
+      letter-spacing: -1px;
+      color: var(--text-primary);
+      margin-bottom: 32px;
+    }
+    .model-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .metric-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .metric-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .metric-bar-bg {
+      height: 3px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .metric-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #a78bfa, #60a5fa);
+      transform-origin: left;
+      animation: bar-grow 1.5s cubic-bezier(0.16,1,0.3,1) forwards;
+      transform: scaleX(0);
+    }
+    @keyframes bar-grow {
+      to { transform: scaleX(1); }
+    }
+
+    .how-steps { display: flex; flex-direction: column; gap: 40px; }
+    .how-step {
+      display: flex;
+      gap: 28px;
+      opacity: 0;
+      transform: translateX(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .how-step.visible { opacity: 1; transform: translateX(0); }
+
+    .step-num {
+      width: 40px; height: 40px; flex-shrink: 0;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 500;
+      color: var(--text-tertiary);
+      position: relative;
+    }
+    .step-num::after {
+      content: '';
+      position: absolute;
+      top: 40px; left: 50%;
+      width: 1px; height: 32px;
+      background: linear-gradient(to bottom, var(--border), transparent);
+      transform: translateX(-50%);
+    }
+    .how-step:last-child .step-num::after { display: none; }
+
+    .step-content {}
+    .step-title { font-size: 17px; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; letter-spacing: -0.3px; }
+    .step-desc  { font-size: 15px; font-weight: 300; line-height: 1.65; color: var(--text-secondary); }
+
+    /* ─── CAPABILITIES ─── */
+    #capabilities {
+      padding: 140px 40px;
+      background: var(--surface-1);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .capabilities-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .capabilities-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    .capabilities-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .cap-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 40px;
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .cap-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(167,139,250,0.04), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .cap-card:hover { border-color: rgba(167,139,250,0.2); transform: translateY(-4px); box-shadow: 0 24px 48px rgba(0,0,0,0.4); }
+    .cap-card:hover::before { opacity: 1; }
+
+    .cap-icon {
+      width: 52px; height: 52px; flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(167,139,250,0.15), rgba(96,165,250,0.1));
+      border: 1px solid rgba(167,139,250,0.2);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+    .cap-text {}
+    .cap-title { font-size: 17px; font-weight: 500; color: var(--text-primary); margin-bottom: 10px; letter-spacing: -0.2px; }
+    .cap-desc  { font-size: 14px; font-weight: 300; line-height: 1.65; color: var(--text-secondary); }
+
+    /* ─── DEMO / CHAT PREVIEW ─── */
+    #demo {
+      padding: 160px 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .demo-window {
+      margin-top: 60px;
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow:
+        0 60px 120px rgba(0,0,0,0.7),
+        0 0 0 1px rgba(255,255,255,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      transform: perspective(1200px) rotateX(2deg);
+      transition: transform 0.5s ease;
+    }
+    .demo-window:hover { transform: perspective(1200px) rotateX(0deg); }
+
+    .demo-topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 24px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+    .dot-red   { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+    .dot-yellow{ width: 12px; height: 12px; border-radius: 50%; background: #febc2e; }
+    .dot-green { width: 12px; height: 12px; border-radius: 50%; background: #28c840; }
+    .demo-title-bar {
+      flex: 1; text-align: center;
+      font-size: 13px; color: var(--text-tertiary);
+      letter-spacing: 0.2px;
+    }
+    .demo-body { padding: 40px; display: flex; flex-direction: column; gap: 24px; text-align: left; }
+
+    .chat-msg {
+      display: flex;
+      gap: 16px;
+      animation: msg-in 0.5s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .chat-msg:nth-child(1) { animation-delay: 0.1s; }
+    .chat-msg:nth-child(2) { animation-delay: 0.3s; }
+    .chat-msg:nth-child(3) { animation-delay: 0.5s; }
+    .chat-msg:nth-child(4) { animation-delay: 0.7s; }
+    @keyframes msg-in {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .chat-avatar {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .chat-avatar.user { background: linear-gradient(135deg, #a78bfa, #60a5fa); }
+    .chat-avatar.ai   { background: linear-gradient(135deg, #1a1a28, #12121c); border: 1px solid var(--border); }
+    .bubble { border-radius: 18px; padding: 14px 20px; max-width: 520px; }
+    .bubble.user { background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.2); }
+    .bubble.ai   { background: var(--surface-2); border: 1px solid var(--border); }
+    .bubble p { font-size: 15px; line-height: 1.62; color: var(--text-primary); font-weight: 300; }
+    .bubble code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      background: rgba(0,0,0,0.4);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #a78bfa;
+    }
+
+    .demo-input {
+      display: flex;
+      gap: 12px;
+      padding: 20px 40px 32px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-1);
+    }
+    .demo-input-field {
+      flex: 1;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 12px 20px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-family: inherit;
+      letter-spacing: 0.1px;
+    }
+    .demo-send {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      color: #fff;
+      flex-shrink: 0;
+      align-self: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .demo-send:hover { transform: scale(1.08); box-shadow: 0 8px 24px rgba(167,139,250,0.4); }
+
+    /* ─── TECH STACK ─── */
+    #tech {
+      padding: 140px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .tech-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: end;
+      margin-bottom: 80px;
+    }
+    .tech-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .tech-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 36px;
+      background: var(--surface-1);
+      transition: background 0.2s;
+    }
+    .tech-item:hover { background: var(--surface-2); }
+    .tech-left { display: flex; align-items: center; gap: 20px; }
+    .tech-badge {
+      width: 44px; height: 44px;
+      background: var(--surface-3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .tech-name  { font-size: 16px; font-weight: 500; color: var(--text-primary); letter-spacing: -0.2px; }
+    .tech-cat   { font-size: 13px; color: var(--text-tertiary); margin-top: 2px; }
+    .tech-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #a78bfa;
+      background: rgba(167,139,250,0.1);
+      border: 1px solid rgba(167,139,250,0.2);
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    /* ─── CTA ─── */
+    #cta {
+      padding: 200px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #cta::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1000px; height: 600px;
+      background: radial-gradient(ellipse at center,
+        rgba(123,94,167,0.15) 0%,
+        rgba(58,134,255,0.08) 40%,
+        transparent 70%);
+      pointer-events: none;
+    }
+    .cta-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(44px, 7vw, 88px);
+      font-weight: 400;
+      line-height: 1.06;
+      letter-spacing: -2.5px;
+      color: var(--text-primary);
+      margin-bottom: 28px;
+      position: relative;
+    }
+    .cta-sub {
+      font-size: 19px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      margin-bottom: 52px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.65;
+      position: relative;
+    }
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 60px 40px;
+      background: var(--near-black);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+    .footer-brand {}
+    .footer-logo {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+    .footer-logo span {
+      background: linear-gradient(90deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .footer-tagline { font-size: 14px; color: var(--text-tertiary); line-height: 1.65; max-width: 280px; }
+
+    .footer-col-title {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 20px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-links a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-copy { font-size: 13px; color: var(--text-tertiary); }
+    .footer-legal { display: flex; gap: 24px; }
+    .footer-legal a { font-size: 13px; color: var(--text-tertiary); text-decoration: none; }
+    .footer-legal a:hover { color: var(--text-secondary); }
+
+    /* ─── REVEAL ANIMATIONS ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── FLOATING ORBS ─── */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    /* ─── QUESTION FORM ─── */
+    #question-form { display: flex; flex-direction: column; gap: 24px; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: 0.2px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      font-size: 15px;
+      font-family: inherit;
+      font-weight: 300;
+      color: var(--text-primary);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .form-input::placeholder { color: var(--text-tertiary); }
+    .form-input:hover  { border-color: rgba(255,255,255,0.14); }
+    .form-input:focus  {
+      border-color: rgba(167,139,250,0.5);
+      background: var(--surface-2);
+      box-shadow: 0 0 0 3px rgba(167,139,250,0.1);
+    }
+    .form-input.error { border-color: rgba(248,113,113,0.5); box-shadow: 0 0 0 3px rgba(248,113,113,0.08); }
+
+    .select-wrap { position: relative; }
+    .form-select { cursor: pointer; padding-right: 44px; }
+    .select-arrow {
+      position: absolute;
+      right: 16px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: var(--text-tertiary);
+      pointer-events: none;
+    }
+    .form-select option { background: #1a1a28; color: var(--text-primary); }
+
+    .form-textarea { resize: vertical; min-height: 130px; line-height: 1.65; }
+
+    .char-count {
+      text-align: right;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-top: 6px;
+    }
+    .char-count.over { color: #f87171; }
+
+    .form-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .form-note { font-size: 13px; color: var(--text-tertiary); line-height: 1.5; }
+
+    .btn-submit {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #000;
+      background: linear-gradient(135deg, #c4b5fd, #93c5fd, #f9a8d4);
+      padding: 14px 28px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 0.2s;
+    }
+    .btn-submit:hover::before { background: rgba(255,255,255,0.12); }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 20px 60px rgba(167,139,250,0.35); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-submit-icon { font-size: 16px; transition: transform 0.2s; }
+    .btn-submit:hover .btn-submit-icon { transform: translateX(3px); }
+
+    .success-icon {
+      font-size: 40px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+    }
+    .success-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 36px;
+      font-weight: 400;
+      letter-spacing: -1px;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    .success-sub {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 1000px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      section { padding: 100px 24px; }
+      #intro { padding: 120px 24px; }
+      #stats { padding: 0 24px 100px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-header { grid-template-columns: 1fr; gap: 32px; }
+      .features-cards  { grid-template-columns: 1fr; }
+      .feature-card.featured { grid-column: span 1; }
+      .how-layout { grid-template-columns: 1fr; gap: 60px; }
+      .model-card { transform: none; }
+      .capabilities-grid { grid-template-columns: 1fr; }
+      .tech-header { grid-template-columns: 1fr; gap: 32px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+      .form-row { grid-template-columns: 1fr; }
+      .form-footer { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 640px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .hero-title { letter-spacing: -1.5px; }
+      .hero-actions { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ─── NAV ─── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Apna <span>Engineer</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#how">Architecture</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#tech">Tech Stack</a></li>
+    <li><a href="#qa">Ask a CS Question</a></li>
+    <li><a href="#ask">Ask Us</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Get Early Access</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-glow"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      Introducing Apna Engineer LLM
+    </div>
+    <h1 class="hero-title">
+      Intelligence<br>
+      <span class="hero-title-gradient">Built Different.</span>
+    </h1>
+    <p class="hero-subtitle">
+      A large language model engineered from the ground up — fast, precise, and deeply context-aware.
+      Designed for developers, researchers, and the curious.
+    </p>
+    <div class="hero-actions">
+      <a href="#demo" class="btn-primary">Explore the Model</a>
+      <a href="#how" class="btn-secondary">How It Works ↓</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <div class="scroll-arrow"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── INTRO ─── -->
+<section id="intro">
+  <p class="hero-eyebrow" style="display:inline-flex;margin-bottom:28px;" class="reveal">Built in India. Built for the World.</p>
+  <h2 class="intro-headline reveal">
+    A model that <em>understands</em> the way you think — not just the words you type.
+  </h2>
+  <p class="intro-sub reveal reveal-delay-1">
+    Apna Engineer is more than an AI assistant. It's a reasoning engine trained with
+    precision, designed for depth, and built to feel like second nature.
+  </p>
+</section>
+
+<!-- ─── STATS ─── -->
+<div id="stats" style="max-width:1200px;margin:0 auto;padding:0 40px 120px;">
+  <div class="stats-grid">
+    <div class="stat-item reveal">
+      <div class="stat-number" data-count="98">0</div>
+      <div class="stat-label">Benchmark accuracy<br>on reasoning tasks</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <div class="stat-number" data-count="7">0</div>
+      <div class="stat-label">Billion+ parameters<br>at inference</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <div class="stat-number" data-count="128">0</div>
+      <div class="stat-label">K context window<br>for long documents</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <div class="stat-number" data-count="40">0</div>
+      <div class="stat-label">ms average<br>time to first token</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider" style="max-width:1200px;margin:0 auto;"></div>
+
+<!-- ─── FEATURES ─── -->
+<section id="features">
+  <div class="features-header">
+    <div>
+      <p class="section-eyebrow reveal">Core Features</p>
+      <h2 class="section-title reveal">Engineered for<br>every use case.</h2>
+    </div>
+    <p class="section-body reveal">
+      From code generation to complex reasoning, Apna Engineer adapts to
+      your workflow — not the other way around.
+    </p>
+  </div>
+
+  <div class="features-cards">
+    <div class="feature-card featured reveal">
+      <div class="feature-icon">🧠</div>
+      <div class="feature-name">Advanced Reasoning</div>
+      <div class="feature-desc">
+        Multi-step logical deduction with chain-of-thought architecture.
+        Apna Engineer breaks complex problems into structured reasoning chains,
+        delivering accurate answers even on tasks that require extended thought.
+      </div>
+    </div>
+
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-name">Low-Latency Inference</div>
+      <div class="feature-desc">Optimized for speed without sacrificing accuracy. Sub-50ms first-token latency on production hardware.</div>
+    </div>
+
+    <div class="feature-card reveal">
+      <div class="feature-icon">💻</div>
+      <div class="feature-name">Code Generation</div>
+      <div class="feature-desc">Write, review, debug, and explain code across 80+ programming languages with context-aware suggestions.</div>
+    </div>
+
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon">📄</div>
+      <div class="feature-name">Long Context</div>
+      <div class="feature-desc">Process entire codebases, research papers, and legal documents in a single 128K-token context window.</div>
+    </div>
+
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon">🌐</div>
+      <div class="feature-name">Multilingual</div>
+      <div class="feature-desc">Native fluency across 50+ languages including Hindi, Bengali, Tamil, and other regional Indian languages.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── HOW IT WORKS ─── -->
+<section id="how">
+  <p class="section-eyebrow reveal">Architecture</p>
+  <h2 class="section-title reveal">How it works.</h2>
+
+  <div class="how-layout">
+    <!-- 3D Card -->
+    <div class="how-visual reveal">
+      <div class="model-card">
+        <div class="model-label">Apna Engineer LLM · v1.0</div>
+        <div class="model-name-display">Foundation<br>Architecture</div>
+        <div class="model-metrics">
+          <div class="metric-row">
+            <div class="metric-header">
+              <span>Reasoning</span>
+              <span>96%</span>
+            </div>
+            <div class="metric-bar-bg">
+              <div class="metric-bar-fill" style="--width:96%;width:96%;animation-delay:0.2s"></div>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-header">
+              <span>Code Generation</span>
+              <span>91%</span>
+            </div>
+            <div class="metric-bar-bg">
+              <div class="metric-bar-fill" style="width:91%;animation-delay:0.4s"></div>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-header">
+              <span>Instruction Following</span>
+              <span>98%</span>
+            </div>
+            <div class="metric-bar-bg">
+              <div class="metric-bar-fill" style="width:98%;animation-delay:0.6s"></div>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-header">
+              <span>Mathematical Reasoning</span>
+              <span>87%</span>
+            </div>
+            <div class="metric-bar-bg">
+              <div class="metric-bar-fill" style="width:87%;animation-delay:0.8s"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="how-steps">
+      <div class="how-step reveal">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Pre-training on diverse corpora</div>
+          <div class="step-desc">
+            Trained on trillions of tokens spanning scientific literature,
+            open-source code, books, web text, and multilingual datasets
+            with a focus on South Asian content coverage.
+          </div>
+        </div>
+      </div>
+      <div class="how-step reveal reveal-delay-1">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Supervised fine-tuning (SFT)</div>
+          <div class="step-desc">
+            Curated instruction-response pairs across domains: coding,
+            mathematics, analysis, creative writing, and reasoning tasks —
+            each verified by domain experts.
+          </div>
+        </div>
+      </div>
+      <div class="how-step reveal reveal-delay-2">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Reinforcement Learning from Human Feedback</div>
+          <div class="step-desc">
+            RLHF alignment with a reward model trained on thousands of
+            human preference comparisons, ensuring safe, helpful, and
+            honest responses.
+          </div>
+        </div>
+      </div>
+      <div class="how-step reveal reveal-delay-3">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">Efficient deployment via quantization</div>
+          <div class="step-desc">
+            INT4/INT8 quantized weights with custom CUDA kernels for
+            maximum throughput on consumer-grade and enterprise GPU hardware.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── CAPABILITIES ─── -->
+<section id="capabilities">
+  <div class="capabilities-inner">
+    <div class="capabilities-header">
+      <p class="section-eyebrow reveal">Capabilities</p>
+      <h2 class="section-title reveal">What Apna Engineer can do.</h2>
+      <p class="section-body reveal" style="margin:0 auto;text-align:center;max-width:540px;">
+        A single model, infinite applications. From enterprise software to personal research workflows.
+      </p>
+    </div>
+
+    <div class="capabilities-grid">
+      <div class="cap-card reveal">
+        <div class="cap-icon">🔬</div>
+        <div class="cap-text">
+          <div class="cap-title">Scientific Research</div>
+          <div class="cap-desc">Summarize papers, generate hypotheses, analyze experimental data, and assist with literature reviews across all scientific disciplines.</div>
+        </div>
+      </div>
+      <div class="cap-card reveal reveal-delay-1">
+        <div class="cap-icon">⚙️</div>
+        <div class="cap-text">
+          <div class="cap-title">Software Engineering</div>
+          <div class="cap-desc">Write production-grade code, architect systems, review pull requests, generate test suites, and explain complex codebases instantly.</div>
+        </div>
+      </div>
+      <div class="cap-card reveal">
+        <div class="cap-icon">📊</div>
+        <div class="cap-text">
+          <div class="cap-title">Data Analysis</div>
+          <div class="cap-desc">Interpret datasets, generate SQL queries, write Python/R analysis scripts, and produce natural-language summaries of complex data.</div>
+        </div>
+      </div>
+      <div class="cap-card reveal reveal-delay-1">
+        <div class="cap-icon">✍️</div>
+        <div class="cap-text">
+          <div class="cap-title">Content Creation</div>
+          <div class="cap-desc">Draft reports, blog posts, technical documentation, marketing copy, and creative narratives with consistent voice and tone.</div>
+        </div>
+      </div>
+      <div class="cap-card reveal">
+        <div class="cap-icon">🏛️</div>
+        <div class="cap-text">
+          <div class="cap-title">Legal & Compliance</div>
+          <div class="cap-desc">Analyze contracts, summarize regulations, draft legal memos, and flag compliance risks with structured reasoning.</div>
+        </div>
+      </div>
+      <div class="cap-card reveal reveal-delay-1">
+        <div class="cap-icon">🎓</div>
+        <div class="cap-text">
+          <div class="cap-title">Education & Tutoring</div>
+          <div class="cap-desc">Adaptive explanations across difficulty levels, problem-solving walkthroughs, and Socratic tutoring for deep conceptual understanding.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DEMO ─── -->
+<section id="demo" style="padding:160px 40px;max-width:1000px;margin:0 auto;text-align:center;">
+  <p class="section-eyebrow reveal">Live Preview</p>
+  <h2 class="section-title reveal" style="margin:0 auto 16px;">See it in action.</h2>
+  <p class="section-body reveal" style="margin:0 auto;max-width:480px;">A glimpse of what a conversation with Apna Engineer looks like.</p>
+
+  <div class="demo-window reveal" style="margin-top:60px;">
+    <div class="demo-topbar">
+      <div class="dot-red"></div>
+      <div class="dot-yellow"></div>
+      <div class="dot-green"></div>
+      <div class="demo-title-bar">Apna Engineer — Chat Interface</div>
+    </div>
+
+    <div class="demo-body">
+      <div class="chat-msg">
+        <div class="chat-avatar user">👤</div>
+        <div class="bubble user">
+          <p>Explain the transformer attention mechanism in simple terms, then show me a Python snippet for scaled dot-product attention.</p>
+        </div>
+      </div>
+      <div class="chat-msg">
+        <div class="chat-avatar ai">✦</div>
+        <div class="bubble ai">
+          <p>Sure! Think of attention like a spotlight — for each word you're processing, it asks: <em>"which other words in the sentence should I pay the most attention to right now?"</em></p>
+        </div>
+      </div>
+      <div class="chat-msg">
+        <div class="chat-avatar ai">✦</div>
+        <div class="bubble ai">
+          <p>Scaled dot-product attention computes: <code>softmax(QKᵀ / √d_k) · V</code><br><br>Where Q (queries), K (keys), and V (values) are learned projections. The <code>√d_k</code> scaling prevents the dot products from growing too large and saturating the softmax.</p>
+        </div>
+      </div>
+      <div class="chat-msg">
+        <div class="chat-avatar ai">✦</div>
+        <div class="bubble ai">
+          <p>Here's a clean implementation:<br><br><code>def scaled_dot_product_attention(Q, K, V, mask=None):<br>&nbsp;&nbsp;&nbsp;&nbsp;d_k = Q.size(-1)<br>&nbsp;&nbsp;&nbsp;&nbsp;scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(d_k)<br>&nbsp;&nbsp;&nbsp;&nbsp;if mask is not None: scores = scores.masked_fill(mask == 0, -1e9)<br>&nbsp;&nbsp;&nbsp;&nbsp;return torch.matmul(F.softmax(scores, dim=-1), V)</code></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-input">
+      <div class="demo-input-field" contenteditable="true">Ask Apna Engineer anything...</div>
+      <button class="demo-send">↑</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── TECH STACK ─── -->
+<section id="tech" style="padding:140px 40px;max-width:1200px;margin:0 auto;">
+  <div class="tech-header">
+    <div>
+      <p class="section-eyebrow reveal">Under the Hood</p>
+      <h2 class="section-title reveal">Built on the best<br>foundations.</h2>
+    </div>
+    <p class="section-body reveal">
+      A carefully chosen stack — every component selected for performance,
+      reliability, and developer experience.
+    </p>
+  </div>
+
+  <div class="tech-list reveal">
+    <div class="tech-item">
+      <div class="tech-left">
+        <div class="tech-badge">🔥</div>
+        <div>
+          <div class="tech-name">PyTorch 2.x</div>
+          <div class="tech-cat">Training & Inference Framework</div>
+        </div>
+      </div>
+      <span class="tech-tag">Core</span>
+    </div>
+    <div class="tech-item">
+      <div class="tech-left">
+        <div class="tech-badge">🤗</div>
+        <div>
+          <div class="tech-name">Hugging Face Transformers</div>
+          <div class="tech-cat">Model Hub & Tokenization</div>
+        </div>
+      </div>
+      <span class="tech-tag">Core</span>
+    </div>
+    <div class="tech-item">
+      <div class="tech-left">
+        <div class="tech-badge">⚡</div>
+        <div>
+          <div class="tech-name">CUDA + Flash Attention 2</div>
+          <div class="tech-cat">GPU Acceleration & Memory Optimization</div>
+        </div>
+      </div>
+      <span class="tech-tag">Performance</span>
+    </div>
+    <div class="tech-item">
+      <div class="tech-left">
+        <div class="tech-badge">🐍</div>
+        <div>
+          <div class="tech-name">Python / FastAPI</div>
+          <div class="tech-cat">Inference API Backend</div>
+        </div>
+      </div>
+      <span class="tech-tag">API</span>
+    </div>
+    <div class="tech-item">
+      <div class="tech-left">
+        <div class="tech-badge">📦</div>
+        <div>
+          <div class="tech-name">GGUF / llama.cpp</div>
+          <div class="tech-cat">Local Deployment & Quantization</div>
+        </div>
+      </div>
+      <span class="tech-tag">Deployment</span>
+    </div>
+    <div class="tech-item">
+      <div class="tech-left">
+        <div class="tech-badge">☁️</div>
+        <div>
+          <div class="tech-name">Kubernetes + NVIDIA Triton</div>
+          <div class="tech-cat">Production Serving Infrastructure</div>
+        </div>
+      </div>
+      <span class="tech-tag">Infrastructure</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── ASK A CS QUESTION (Q&A KNOWLEDGE BASE) ─── -->
+<section id="qa" style="padding:140px 40px;">
+  <div style="max-width:820px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:56px;">
+      <p class="section-eyebrow reveal">Knowledge Base</p>
+      <h2 class="section-title reveal" style="margin:0 auto 20px;">Ask a Computer Science question.</h2>
+      <p class="section-body reveal" style="margin:0 auto;max-width:520px;text-align:center;">
+        Type any basic Computer Science question below. Apna Engineer will match it against
+        a library of <strong id="qa-total-count">0</strong>+ core CS concepts and answer instantly.
+      </p>
+    </div>
+
+    <div class="reveal" style="position:relative;">
+      <div style="position:relative;">
+        <input
+          id="qa-input"
+          class="form-input"
+          type="text"
+          autocomplete="off"
+          placeholder="e.g. What is a linked list? What is inheritance?"
+          style="padding-right:120px;font-size:16px;"
+        />
+        <button id="qa-ask-btn" class="btn-submit" style="position:absolute;right:6px;top:6px;bottom:6px;padding:0 22px;">
+          <span class="btn-submit-label">Ask</span>
+          <span class="btn-submit-icon">→</span>
+        </button>
+      </div>
+
+      <!-- Live suggestions -->
+      <div id="qa-suggestions" style="
+        margin-top:10px;
+        background:var(--surface-1);
+        border:1px solid var(--border);
+        border-radius:var(--radius-md);
+        overflow:hidden;
+        display:none;
+      "></div>
+
+      <!-- Answer card -->
+      <div id="qa-answer-card" style="
+        display:none;
+        margin-top:28px;
+        background:var(--surface-2);
+        border:1px solid var(--border);
+        border-radius:var(--radius-lg);
+        padding:32px 36px;
+        text-align:left;
+        position:relative;
+        overflow:hidden;
+      ">
+        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:14px;">
+          <div class="chat-avatar ai" style="width:36px;height:36px;font-size:15px;">✦</div>
+          <div style="flex:1;">
+            <div id="qa-category-tag" class="tech-tag" style="margin-bottom:10px;display:inline-block;"></div>
+            <div id="qa-question-echo" style="font-size:15px;color:var(--text-tertiary);margin-bottom:10px;font-weight:300;"></div>
+            <div id="qa-answer-text" style="font-size:17px;line-height:1.7;color:var(--text-primary);font-weight:300;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No match -->
+      <div id="qa-no-match" style="
+        display:none;
+        margin-top:28px;
+        background:var(--surface-1);
+        border:1px dashed var(--border);
+        border-radius:var(--radius-lg);
+        padding:28px 32px;
+        text-align:center;
+      ">
+        <p style="font-size:15px;color:var(--text-secondary);font-weight:300;line-height:1.6;">
+          No close match found in the knowledge base yet. Try rephrasing, or browse a topic below.
+        </p>
+      </div>
+    </div>
+
+    <!-- Category browser -->
+    <div class="reveal" style="margin-top:64px;">
+      <p class="footer-col-title" style="text-align:center;margin-bottom:24px;">Or browse by topic</p>
+      <div id="qa-category-pills" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;"></div>
+    </div>
+
+    <!-- Random question list for a chosen category -->
+    <div id="qa-category-list" style="margin-top:32px;display:none;">
+      <div id="qa-category-list-items" style="
+        display:flex;
+        flex-direction:column;
+        gap:1px;
+        background:var(--border);
+        border:1px solid var(--border);
+        border-radius:var(--radius-lg);
+        overflow:hidden;
+      "></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── ASK A QUESTION ─── -->
+<section id="ask" style="padding:140px 40px;">
+  <div style="max-width:720px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:56px;">
+      <p class="section-eyebrow reveal">Community</p>
+      <h2 class="section-title reveal" style="margin:0 auto 20px;">Have a question?</h2>
+      <p class="section-body reveal" style="margin:0 auto;max-width:480px;text-align:center;">
+        Ask us anything about the model, API, research, or roadmap.
+        We read every submission and publish answers in our public FAQ.
+      </p>
+    </div>
+
+    <form id="question-form" class="reveal" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="q-name">Your Name</label>
+          <input class="form-input" id="q-name" type="text" placeholder="Riya Sharma" autocomplete="name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="q-email">Email Address</label>
+          <input class="form-input" id="q-email" type="email" placeholder="riya@example.com" autocomplete="email" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="q-topic">Topic</label>
+        <div class="select-wrap">
+          <select class="form-input form-select" id="q-topic">
+            <option value="" disabled selected>Choose a topic…</option>
+            <option>Model Capabilities</option>
+            <option>API & Integration</option>
+            <option>Pricing & Access</option>
+            <option>Research & Benchmarks</option>
+            <option>Fine-tuning & Customization</option>
+            <option>Other</option>
+          </select>
+          <span class="select-arrow">↓</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="q-body">Your Question</label>
+        <textarea class="form-input form-textarea" id="q-body" rows="5" placeholder="What would you like to know about Apna Engineer?"></textarea>
+        <div class="char-count"><span id="char-num">0</span> / 500</div>
+      </div>
+
+      <div class="form-footer">
+        <p class="form-note">We typically respond within 48 hours. Your email stays private.</p>
+        <button type="submit" class="btn-submit" id="submit-btn">
+          <span class="btn-submit-label">Submit Question</span>
+          <span class="btn-submit-icon">→</span>
+        </button>
+      </div>
+    </form>
+
+    <!-- Success State -->
+    <div id="form-success" style="display:none;text-align:center;padding:64px 0;">
+      <div class="success-icon">✦</div>
+      <h3 class="success-title">Question received.</h3>
+      <p class="success-sub">Thanks for reaching out. We'll get back to you at the email you provided within 48 hours.</p>
+      <button onclick="resetForm()" class="btn-secondary" style="margin-top:32px;font-size:14px;">Ask another question</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ─── CTA ─── -->
+<section id="cta">
+  <h2 class="cta-title reveal">
+    The future of AI<br>engineering starts here.
+  </h2>
+  <p class="cta-sub reveal reveal-delay-1">
+    Join the waitlist for early API access. Built for developers who demand more.
+  </p>
+  <div class="cta-actions reveal reveal-delay-2">
+    <a href="#" class="btn-primary">Request API Access</a>
+    <a href="#" class="btn-secondary">Read the Docs</a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Apna <span>Engineer</span></div>
+        <p class="footer-tagline">
+          An LLM built for India and beyond. Precision, speed,
+          and intelligence — engineered with purpose.
+        </p>
+      </div>
+      <div>
+        <div class="footer-col-title">Product</div>
+        <ul class="footer-links">
+          <li><a href="#">Overview</a></li>
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Benchmarks</a></li>
+          <li><a href="#">API Reference</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Research</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Resources</div>
+        <ul class="footer-links">
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">GitHub</a></li>
+          <li><a href="#">Discord</a></li>
+          <li><a href="#">Status</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">Copyright © 2025 Apna Engineer. All rights reserved.</div>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── QNA DATA ─── -->
+<script id="qa-data-script" type="application/json">[{"cat": "Programming Basics", "q": "What is a variable?", "a": "A named storage location in memory used to hold a value that can change during program execution."}, {"cat": "Programming Basics", "q": "What is a data type?", "a": "A classification that specifies which type of value a variable can hold, such as integer, float, or string."}, {"cat": "Programming Basics", "q": "What is a compiler?", "a": "A program that translates source code written in a high-level language into machine code before execution."}, {"cat": "Programming Basics", "q": "What is an interpreter?", "a": "A program that executes source code line by line without producing a separate machine code file."}, {"cat": "Programming Basics", "q": "What is the difference between compiler and interpreter?", "a": "A compiler translates the whole program at once before running, while an interpreter translates and executes line by line."}, {"cat": "Programming Basics", "q": "What is a syntax error?", "a": "An error that occurs when code violates the grammatical rules of a programming language."}, {"cat": "Programming Basics", "q": "What is a runtime error?", "a": "An error that occurs during program execution, such as dividing by zero."}, {"cat": "Programming Basics", "q": "What is a logical error?", "a": "An error where the program runs without crashing but produces incorrect results due to flawed logic."}, {"cat": "Programming Basics", "q": "What is a loop?", "a": "A control structure that repeats a block of code as long as a condition is true."}, {"cat": "Programming Basics", "q": "What is a for loop?", "a": "A loop that repeats a fixed number of times, typically using a counter variable."}, {"cat": "Programming Basics", "q": "What is a while loop?", "a": "A loop that repeats as long as a specified condition remains true."}, {"cat": "Programming Basics", "q": "What is a do-while loop?", "a": "A loop that executes its body at least once before checking the loop condition."}, {"cat": "Programming Basics", "q": "What is an infinite loop?", "a": "A loop whose terminating condition never becomes false, causing it to run forever."}, {"cat": "Programming Basics", "q": "What is a function?", "a": "A reusable block of code that performs a specific task and can be called by name."}, {"cat": "Programming Basics", "q": "What is a parameter?", "a": "A variable listed in a function's definition that receives a value when the function is called."}, {"cat": "Programming Basics", "q": "What is an argument?", "a": "The actual value passed to a function when it is called."}, {"cat": "Programming Basics", "q": "What is recursion?", "a": "A technique where a function calls itself to solve smaller instances of a problem."}, {"cat": "Programming Basics", "q": "What is a base case in recursion?", "a": "The condition that stops recursive calls from continuing indefinitely."}, {"cat": "Programming Basics", "q": "What is an array?", "a": "A collection of elements of the same type stored in contiguous memory locations."}, {"cat": "Programming Basics", "q": "What is an index?", "a": "A number representing the position of an element within an array or list."}, {"cat": "Programming Basics", "q": "What is a string?", "a": "A sequence of characters used to represent text."}, {"cat": "Programming Basics", "q": "What is pseudocode?", "a": "An informal, high-level description of an algorithm using plain language and simple structure."}, {"cat": "Programming Basics", "q": "What is an algorithm?", "a": "A step-by-step procedure for solving a problem or completing a task."}, {"cat": "Programming Basics", "q": "What is a flowchart?", "a": "A diagram that represents the steps of an algorithm using boxes and arrows."}, {"cat": "Programming Basics", "q": "What is debugging?", "a": "The process of finding and fixing errors in a program."}, {"cat": "Programming Basics", "q": "What is a comment in code?", "a": "Text in source code ignored by the compiler or interpreter, used to explain the code to humans."}, {"cat": "Programming Basics", "q": "What is an IDE?", "a": "An Integrated Development Environment, a software application that combines tools like an editor, compiler, and debugger."}, {"cat": "Programming Basics", "q": "What is a variable's scope?", "a": "The region of a program where a variable can be accessed."}, {"cat": "Programming Basics", "q": "What is a global variable?", "a": "A variable that is accessible from any part of the program."}, {"cat": "Programming Basics", "q": "What is a local variable?", "a": "A variable declared inside a function or block that is only accessible within it."}, {"cat": "Programming Basics", "q": "What is type casting?", "a": "Converting a value from one data type to another."}, {"cat": "Programming Basics", "q": "What is a constant?", "a": "A value that cannot be changed once it is assigned."}, {"cat": "Programming Basics", "q": "What is an operator?", "a": "A symbol that performs an operation on one or more operands, such as + or &&."}, {"cat": "Programming Basics", "q": "What is the difference between == and =?", "a": "\"=\" assigns a value to a variable while \"==\" compares two values for equality."}, {"cat": "Programming Basics", "q": "What is a Boolean?", "a": "A data type that can hold only two values, true or false."}, {"cat": "Programming Basics", "q": "What is a conditional statement?", "a": "A statement that executes different code depending on whether a condition is true or false."}, {"cat": "Programming Basics", "q": "What is an if-else statement?", "a": "A conditional structure that runs one block of code if a condition is true and another if it is false."}, {"cat": "Programming Basics", "q": "What is a switch statement?", "a": "A control structure that selects one of many code blocks to execute based on the value of a variable."}, {"cat": "Programming Basics", "q": "What is a null value?", "a": "A special value indicating that a variable has no assigned value or points to nothing."}, {"cat": "Programming Basics", "q": "What is an exception?", "a": "An unexpected event during program execution that disrupts the normal flow, usually handled with try-catch."}, {"cat": "Programming Basics", "q": "What is exception handling?", "a": "A mechanism for responding to runtime errors gracefully instead of crashing the program."}, {"cat": "Programming Basics", "q": "What is a try-catch block?", "a": "A construct used to catch and handle exceptions that occur in the try section of code."}, {"cat": "Programming Basics", "q": "What is source code?", "a": "The human-readable code written by a programmer in a programming language."}, {"cat": "Programming Basics", "q": "What is machine code?", "a": "Low-level binary instructions that a computer's processor can execute directly."}, {"cat": "Programming Basics", "q": "What is a variable declaration?", "a": "The statement that introduces a variable and its type to the program."}, {"cat": "Programming Basics", "q": "What is a variable initialization?", "a": "Assigning an initial value to a variable at the time it is declared."}, {"cat": "Programming Basics", "q": "What is pass by value?", "a": "A method of passing arguments where a copy of the value is passed to the function."}, {"cat": "Programming Basics", "q": "What is pass by reference?", "a": "A method of passing arguments where the function receives a reference to the actual variable, allowing it to modify it."}, {"cat": "Programming Basics", "q": "What is a library in programming?", "a": "A collection of pre-written code that provides reusable functions and classes."}, {"cat": "Programming Basics", "q": "What is a keyword in programming?", "a": "A reserved word in a programming language that has a special predefined meaning."}, {"cat": "Programming Basics", "q": "What is an escape sequence?", "a": "A combination of characters used to represent special characters within a string, such as \\n for a newline."}, {"cat": "Object-Oriented Programming", "q": "What does OOP stand for?", "a": "Object-Oriented Programming, a paradigm based on the concept of objects containing data and behavior."}, {"cat": "Object-Oriented Programming", "q": "What is a class?", "a": "A blueprint that defines the properties and behaviors (methods) of objects."}, {"cat": "Object-Oriented Programming", "q": "What is an object?", "a": "An instance of a class that has state and behavior."}, {"cat": "Object-Oriented Programming", "q": "What is encapsulation?", "a": "Bundling data and methods that operate on it within a single unit while restricting direct access to some components."}, {"cat": "Object-Oriented Programming", "q": "What is inheritance?", "a": "A mechanism where a new class derives properties and behavior from an existing class."}, {"cat": "Object-Oriented Programming", "q": "What is polymorphism?", "a": "The ability of different classes to be treated through the same interface, allowing methods to behave differently based on the object."}, {"cat": "Object-Oriented Programming", "q": "What is abstraction?", "a": "Hiding complex implementation details and showing only the essential features of an object."}, {"cat": "Object-Oriented Programming", "q": "What is a constructor?", "a": "A special method automatically called when an object is created, used to initialize it."}, {"cat": "Object-Oriented Programming", "q": "What is a destructor?", "a": "A special method called when an object is destroyed, used to release resources."}, {"cat": "Object-Oriented Programming", "q": "What is method overloading?", "a": "Defining multiple methods with the same name but different parameters within the same class."}, {"cat": "Object-Oriented Programming", "q": "What is method overriding?", "a": "Redefining a method in a subclass that already exists in its parent class."}, {"cat": "Object-Oriented Programming", "q": "What is a superclass?", "a": "The parent class from which other classes inherit."}, {"cat": "Object-Oriented Programming", "q": "What is a subclass?", "a": "A class that inherits properties and methods from a parent class."}, {"cat": "Object-Oriented Programming", "q": "What is an interface?", "a": "A contract that defines a set of methods a class must implement, without providing their implementation."}, {"cat": "Object-Oriented Programming", "q": "What is an abstract class?", "a": "A class that cannot be instantiated and may contain abstract methods that subclasses must implement."}, {"cat": "Object-Oriented Programming", "q": "What is multiple inheritance?", "a": "A feature where a class can inherit from more than one parent class."}, {"cat": "Object-Oriented Programming", "q": "What is a static method?", "a": "A method that belongs to the class itself rather than any object instance and can be called without creating an object."}, {"cat": "Object-Oriented Programming", "q": "What is a static variable?", "a": "A variable shared by all instances of a class rather than being unique to each object."}, {"cat": "Object-Oriented Programming", "q": "What is the 'this' keyword used for?", "a": "It refers to the current instance of the class within a method."}, {"cat": "Object-Oriented Programming", "q": "What is a getter method?", "a": "A method used to access the value of a private field."}, {"cat": "Object-Oriented Programming", "q": "What is a setter method?", "a": "A method used to modify the value of a private field."}, {"cat": "Object-Oriented Programming", "q": "What is data hiding?", "a": "Restricting access to certain details of an object to protect its internal state."}, {"cat": "Object-Oriented Programming", "q": "What is composition in OOP?", "a": "A design principle where a class contains objects of other classes as members to build complex behavior."}, {"cat": "Object-Oriented Programming", "q": "What is aggregation?", "a": "A form of association where one class contains a reference to another but both can exist independently."}, {"cat": "Object-Oriented Programming", "q": "What is coupling?", "a": "The degree to which one class depends on another class."}, {"cat": "Object-Oriented Programming", "q": "What is cohesion?", "a": "The degree to which the responsibilities of a single class are related and focused."}, {"cat": "Object-Oriented Programming", "q": "What is method binding?", "a": "The process of linking a method call to the method body, which can happen at compile time or run time."}, {"cat": "Object-Oriented Programming", "q": "What is dynamic binding?", "a": "Resolving which method implementation to call at runtime, typically used with polymorphism."}, {"cat": "Object-Oriented Programming", "q": "What is static binding?", "a": "Resolving method calls at compile time."}, {"cat": "Object-Oriented Programming", "q": "What is an access modifier?", "a": "A keyword that sets the accessibility of classes, methods, and variables, such as public, private, or protected."}, {"cat": "Object-Oriented Programming", "q": "What is the difference between public and private access?", "a": "Public members can be accessed from anywhere, while private members can only be accessed within the defining class."}, {"cat": "Object-Oriented Programming", "q": "What is a protected access modifier?", "a": "It allows access within the same class and its subclasses."}, {"cat": "Object-Oriented Programming", "q": "What is object composition vs inheritance?", "a": "Composition builds functionality by combining objects, while inheritance builds functionality by extending a class hierarchy."}, {"cat": "Object-Oriented Programming", "q": "What is a singleton class?", "a": "A class designed to allow only one instance of itself to be created."}, {"cat": "Object-Oriented Programming", "q": "What is a friend function or class?", "a": "A function or class given special access to the private members of another class, used in languages like C++."}, {"cat": "Object-Oriented Programming", "q": "What is a virtual function?", "a": "A function in a base class that can be overridden in a derived class to achieve runtime polymorphism."}, {"cat": "Object-Oriented Programming", "q": "What is an object's state?", "a": "The data or attribute values held by an object at a given time."}, {"cat": "Object-Oriented Programming", "q": "What is an object's behavior?", "a": "The actions an object can perform, defined by its methods."}, {"cat": "Object-Oriented Programming", "q": "What is UML?", "a": "Unified Modeling Language, a standard notation for visually designing and documenting object-oriented systems."}, {"cat": "Object-Oriented Programming", "q": "What is a class diagram?", "a": "A UML diagram that shows the classes in a system, their attributes, methods, and relationships."}, {"cat": "Data Structures", "q": "What is a data structure?", "a": "A way of organizing and storing data so it can be accessed and modified efficiently."}, {"cat": "Data Structures", "q": "What is a linked list?", "a": "A linear data structure where elements (nodes) are connected via pointers rather than stored contiguously."}, {"cat": "Data Structures", "q": "What is a singly linked list?", "a": "A linked list where each node points only to the next node."}, {"cat": "Data Structures", "q": "What is a doubly linked list?", "a": "A linked list where each node has pointers to both the next and previous nodes."}, {"cat": "Data Structures", "q": "What is a circular linked list?", "a": "A linked list where the last node points back to the first node, forming a loop."}, {"cat": "Data Structures", "q": "What is a stack?", "a": "A linear data structure that follows the Last-In-First-Out (LIFO) principle."}, {"cat": "Data Structures", "q": "What is a queue?", "a": "A linear data structure that follows the First-In-First-Out (FIFO) principle."}, {"cat": "Data Structures", "q": "What is a circular queue?", "a": "A queue where the last position is connected back to the first, forming a circle to use space efficiently."}, {"cat": "Data Structures", "q": "What is a priority queue?", "a": "A queue where each element has a priority, and elements with higher priority are served first."}, {"cat": "Data Structures", "q": "What is a deque?", "a": "A double-ended queue that allows insertion and deletion at both ends."}, {"cat": "Data Structures", "q": "What is a tree?", "a": "A hierarchical data structure consisting of nodes connected by edges, with one root node and no cycles."}, {"cat": "Data Structures", "q": "What is a binary tree?", "a": "A tree in which each node has at most two children."}, {"cat": "Data Structures", "q": "What is a binary search tree?", "a": "A binary tree where the left child is smaller and the right child is larger than the parent node."}, {"cat": "Data Structures", "q": "What is a balanced binary tree?", "a": "A binary tree where the height difference between left and right subtrees is minimal for every node."}, {"cat": "Data Structures", "q": "What is an AVL tree?", "a": "A self-balancing binary search tree where the height difference between subtrees is at most one."}, {"cat": "Data Structures", "q": "What is a red-black tree?", "a": "A self-balancing binary search tree that maintains balance using node coloring rules."}, {"cat": "Data Structures", "q": "What is a heap?", "a": "A complete binary tree that satisfies the heap property, where each parent is greater or smaller than its children."}, {"cat": "Data Structures", "q": "What is a min-heap?", "a": "A heap where the smallest element is always at the root."}, {"cat": "Data Structures", "q": "What is a max-heap?", "a": "A heap where the largest element is always at the root."}, {"cat": "Data Structures", "q": "What is a graph?", "a": "A data structure consisting of nodes (vertices) connected by edges, which can be directed or undirected."}, {"cat": "Data Structures", "q": "What is a directed graph?", "a": "A graph where edges have a direction, going from one vertex to another."}, {"cat": "Data Structures", "q": "What is an undirected graph?", "a": "A graph where edges have no direction and connections are bidirectional."}, {"cat": "Data Structures", "q": "What is a weighted graph?", "a": "A graph where each edge has an associated numerical value called a weight."}, {"cat": "Data Structures", "q": "What is an adjacency matrix?", "a": "A 2D array used to represent a graph, where each cell indicates whether an edge exists between two vertices."}, {"cat": "Data Structures", "q": "What is an adjacency list?", "a": "A representation of a graph where each vertex stores a list of its neighboring vertices."}, {"cat": "Data Structures", "q": "What is a hash table?", "a": "A data structure that maps keys to values using a hash function for fast lookup."}, {"cat": "Data Structures", "q": "What is a hash function?", "a": "A function that converts input data into a fixed-size value used to index a hash table."}, {"cat": "Data Structures", "q": "What is a hash collision?", "a": "A situation where two different keys produce the same hash value."}, {"cat": "Data Structures", "q": "How is collision resolved in hash tables?", "a": "Common methods include chaining, using linked lists at each bucket, and open addressing, probing for the next free slot."}, {"cat": "Data Structures", "q": "What is a trie?", "a": "A tree-like data structure used to store strings, where each node represents a character."}, {"cat": "Data Structures", "q": "What is the difference between linked list and array?", "a": "Arrays offer fast indexed access with fixed size, while linked lists allow dynamic size with slower access but faster insertion or deletion."}, {"cat": "Data Structures", "q": "What is Big O notation?", "a": "A mathematical notation used to describe the upper bound of an algorithm's time or space complexity."}, {"cat": "Data Structures", "q": "What is time complexity?", "a": "A measure of the amount of time an algorithm takes to run as a function of input size."}, {"cat": "Data Structures", "q": "What is space complexity?", "a": "A measure of the amount of memory an algorithm uses as a function of input size."}, {"cat": "Data Structures", "q": "What is O(1) complexity?", "a": "Constant time complexity, meaning the operation takes the same time regardless of input size."}, {"cat": "Data Structures", "q": "What is O(n) complexity?", "a": "Linear time complexity, meaning the time grows proportionally with input size."}, {"cat": "Data Structures", "q": "What is O(log n) complexity?", "a": "Logarithmic time complexity, common in algorithms that repeatedly halve the input, like binary search."}, {"cat": "Data Structures", "q": "What is O(n^2) complexity?", "a": "Quadratic time complexity, common in algorithms with nested loops over the input."}, {"cat": "Data Structures", "q": "What is a stack overflow?", "a": "An error that occurs when a program uses more stack memory than is available, often due to deep or infinite recursion."}, {"cat": "Data Structures", "q": "What is an array's time complexity for access?", "a": "O(1), because elements can be accessed directly by index."}, {"cat": "Data Structures", "q": "What is a matrix?", "a": "A two-dimensional array of numbers arranged in rows and columns."}, {"cat": "Data Structures", "q": "What is a sparse matrix?", "a": "A matrix in which most of the elements are zero."}, {"cat": "Data Structures", "q": "What is a doubly ended queue used for?", "a": "Efficient insertion and removal from both the front and back, useful for sliding window algorithms."}, {"cat": "Data Structures", "q": "What is tree traversal?", "a": "The process of visiting all nodes in a tree in a specific order."}, {"cat": "Data Structures", "q": "What is in-order traversal?", "a": "A tree traversal that visits the left subtree, then the node, then the right subtree."}, {"cat": "Data Structures", "q": "What is pre-order traversal?", "a": "A tree traversal that visits the node first, then the left subtree, then the right subtree."}, {"cat": "Data Structures", "q": "What is post-order traversal?", "a": "A tree traversal that visits the left subtree, then the right subtree, then the node."}, {"cat": "Data Structures", "q": "What is level-order traversal?", "a": "A tree traversal that visits nodes level by level, typically using a queue."}, {"cat": "Data Structures", "q": "What is a leaf node?", "a": "A node in a tree that has no children."}, {"cat": "Data Structures", "q": "What is the root node?", "a": "The topmost node in a tree, from which all other nodes descend."}, {"cat": "Data Structures", "q": "What is a binary heap used for?", "a": "Implementing priority queues and heap sort efficiently."}, {"cat": "Data Structures", "q": "What is a self-balancing tree?", "a": "A tree that automatically maintains a balanced height after insertions and deletions."}, {"cat": "Data Structures", "q": "What is the advantage of doubly linked list over singly linked list?", "a": "It allows traversal in both directions, making deletion of a node easier."}, {"cat": "Data Structures", "q": "What is a dynamic array?", "a": "An array that can resize itself automatically when it becomes full, such as ArrayList in Java or vector in C++."}, {"cat": "Data Structures", "q": "What is a skip list?", "a": "A layered linked list structure that allows fast search by skipping over multiple elements."}, {"cat": "Algorithms", "q": "What is a sorting algorithm?", "a": "An algorithm that arranges elements of a list in a specific order, usually ascending or descending."}, {"cat": "Algorithms", "q": "What is bubble sort?", "a": "A simple sorting algorithm that repeatedly swaps adjacent elements if they are in the wrong order."}, {"cat": "Algorithms", "q": "What is selection sort?", "a": "A sorting algorithm that repeatedly selects the smallest or largest element and places it in its correct position."}, {"cat": "Algorithms", "q": "What is insertion sort?", "a": "A sorting algorithm that builds the sorted array one element at a time by inserting each into its correct position."}, {"cat": "Algorithms", "q": "What is merge sort?", "a": "A divide-and-conquer sorting algorithm that splits the array, sorts each half, and merges them back together."}, {"cat": "Algorithms", "q": "What is quicksort?", "a": "A divide-and-conquer sorting algorithm that partitions the array around a pivot and recursively sorts the partitions."}, {"cat": "Algorithms", "q": "What is heap sort?", "a": "A sorting algorithm that uses a binary heap to repeatedly extract the maximum or minimum element."}, {"cat": "Algorithms", "q": "What is the time complexity of bubble sort?", "a": "O(n^2) in the average and worst case."}, {"cat": "Algorithms", "q": "What is the time complexity of merge sort?", "a": "O(n log n) in all cases."}, {"cat": "Algorithms", "q": "What is the time complexity of quicksort?", "a": "O(n log n) on average, but O(n^2) in the worst case."}, {"cat": "Algorithms", "q": "What is a stable sorting algorithm?", "a": "A sorting algorithm that preserves the relative order of equal elements."}, {"cat": "Algorithms", "q": "What is binary search?", "a": "A search algorithm that finds an element in a sorted array by repeatedly dividing the search range in half."}, {"cat": "Algorithms", "q": "What is linear search?", "a": "A search algorithm that checks each element sequentially until the target is found."}, {"cat": "Algorithms", "q": "What is the time complexity of binary search?", "a": "O(log n)."}, {"cat": "Algorithms", "q": "What is the time complexity of linear search?", "a": "O(n)."}, {"cat": "Algorithms", "q": "What is divide and conquer?", "a": "An algorithmic strategy that breaks a problem into smaller subproblems, solves them, and combines the results."}, {"cat": "Algorithms", "q": "What is dynamic programming?", "a": "A technique that solves complex problems by breaking them into overlapping subproblems and storing the results to avoid recomputation."}, {"cat": "Algorithms", "q": "What is memoization?", "a": "A dynamic programming technique that caches the results of expensive function calls to reuse later."}, {"cat": "Algorithms", "q": "What is a greedy algorithm?", "a": "An algorithm that makes the locally optimal choice at each step in hopes of finding a global optimum."}, {"cat": "Algorithms", "q": "What is backtracking?", "a": "An algorithmic technique that tries partial solutions and abandons them if they fail to satisfy constraints."}, {"cat": "Algorithms", "q": "What is breadth-first search?", "a": "A graph traversal algorithm that explores all neighbors of a node before moving to the next level."}, {"cat": "Algorithms", "q": "What is depth-first search?", "a": "A graph traversal algorithm that explores as far as possible along a branch before backtracking."}, {"cat": "Algorithms", "q": "What is Dijkstra's algorithm?", "a": "An algorithm for finding the shortest path from a source node to all other nodes in a weighted graph with non-negative weights."}, {"cat": "Algorithms", "q": "What is the Bellman-Ford algorithm?", "a": "A shortest path algorithm that can handle graphs with negative edge weights."}, {"cat": "Algorithms", "q": "What is a minimum spanning tree?", "a": "A subset of edges in a weighted graph that connects all vertices with the minimum possible total edge weight."}, {"cat": "Algorithms", "q": "What is Kruskal's algorithm?", "a": "A greedy algorithm for finding a minimum spanning tree by adding the smallest edges that don't form a cycle."}, {"cat": "Algorithms", "q": "What is Prim's algorithm?", "a": "A greedy algorithm for finding a minimum spanning tree by growing the tree one vertex at a time from a starting node."}, {"cat": "Algorithms", "q": "What is worst-case analysis?", "a": "Describes the maximum time or space an algorithm could take for any input of a given size."}, {"cat": "Algorithms", "q": "What is amortized analysis?", "a": "A method of analyzing the average time per operation over a sequence of operations, even if some are costly."}, {"cat": "Algorithms", "q": "What is a recursive algorithm?", "a": "An algorithm that solves a problem by calling itself on smaller inputs."}, {"cat": "Algorithms", "q": "What is the difference between BFS and DFS?", "a": "BFS explores level by level using a queue, while DFS explores as deep as possible using a stack or recursion."}, {"cat": "Algorithms", "q": "What is topological sorting?", "a": "An ordering of vertices in a directed acyclic graph such that for every edge u to v, u comes before v."}, {"cat": "Algorithms", "q": "What is a cycle in a graph?", "a": "A path that starts and ends at the same vertex without repeating edges."}, {"cat": "Algorithms", "q": "What is an NP-complete problem?", "a": "A class of problems for which no known polynomial-time solution exists, but a proposed solution can be verified quickly."}, {"cat": "Algorithms", "q": "What is the traveling salesman problem?", "a": "An optimization problem that seeks the shortest possible route visiting a set of cities and returning to the start."}, {"cat": "Algorithms", "q": "What is the knapsack problem?", "a": "An optimization problem that selects items with given weights and values to maximize value without exceeding a weight limit."}, {"cat": "Algorithms", "q": "What is a pivot in quicksort?", "a": "An element chosen to partition the array into elements smaller and larger than itself."}, {"cat": "Algorithms", "q": "What is a searching algorithm?", "a": "An algorithm designed to retrieve information stored within a data structure."}, {"cat": "Algorithms", "q": "What is the master theorem?", "a": "A formula used to determine the time complexity of divide-and-conquer recursive algorithms."}, {"cat": "Algorithms", "q": "What is asymptotic notation?", "a": "Mathematical notation such as Big O, Omega, and Theta used to describe the growth rate of an algorithm's running time."}, {"cat": "Algorithms", "q": "What is Big Omega notation?", "a": "Notation that describes the lower bound, or best case, of an algorithm's running time."}, {"cat": "Algorithms", "q": "What is Big Theta notation?", "a": "Notation that describes a tight bound, when an algorithm's upper and lower bounds are the same."}, {"cat": "Algorithms", "q": "What is an in-place algorithm?", "a": "An algorithm that transforms input using no or very little extra memory."}, {"cat": "Algorithms", "q": "What is a brute-force algorithm?", "a": "An algorithm that tries all possible solutions to find the correct one."}, {"cat": "Algorithms", "q": "What is a randomized algorithm?", "a": "An algorithm that uses random numbers to make decisions during execution."}, {"cat": "Algorithms", "q": "What is string matching?", "a": "The process of finding occurrences of a pattern string within a larger text."}, {"cat": "Algorithms", "q": "What is the KMP algorithm?", "a": "The Knuth-Morris-Pratt algorithm, an efficient string matching algorithm that avoids re-checking characters."}, {"cat": "Algorithms", "q": "What is a sliding window technique?", "a": "An algorithmic technique that maintains a subset, or window, of data and slides it across the input to solve problems efficiently."}, {"cat": "Algorithms", "q": "What is the two-pointer technique?", "a": "A technique that uses two indices moving through a data structure to solve problems, often in sorted arrays."}, {"cat": "Algorithms", "q": "What is a memo table used for in dynamic programming?", "a": "Storing previously computed results of subproblems to avoid redundant computation."}, {"cat": "Database Management Systems", "q": "What is DBMS?", "a": "Database Management System, software used to create, manage, and interact with databases."}, {"cat": "Database Management Systems", "q": "What is a database?", "a": "An organized collection of structured data stored electronically."}, {"cat": "Database Management Systems", "q": "What is SQL?", "a": "Structured Query Language, used to communicate with and manipulate relational databases."}, {"cat": "Database Management Systems", "q": "What is a relational database?", "a": "A database that organizes data into tables with rows and columns, linked by relationships."}, {"cat": "Database Management Systems", "q": "What is a primary key?", "a": "A column or set of columns that uniquely identifies each row in a table."}, {"cat": "Database Management Systems", "q": "What is a foreign key?", "a": "A column that references the primary key of another table to establish a relationship."}, {"cat": "Database Management Systems", "q": "What is normalization?", "a": "The process of organizing database tables to reduce redundancy and improve data integrity."}, {"cat": "Database Management Systems", "q": "What is denormalization?", "a": "The process of combining tables to improve read performance at the cost of some redundancy."}, {"cat": "Database Management Systems", "q": "What is First Normal Form (1NF)?", "a": "A rule requiring that table columns contain atomic, indivisible values with no repeating groups."}, {"cat": "Database Management Systems", "q": "What is Second Normal Form (2NF)?", "a": "A rule requiring 1NF plus that all non-key attributes depend on the whole primary key."}, {"cat": "Database Management Systems", "q": "What is Third Normal Form (3NF)?", "a": "A rule requiring 2NF plus that non-key attributes depend only on the primary key, not on other non-key attributes."}, {"cat": "Database Management Systems", "q": "What is a join in SQL?", "a": "An operation that combines rows from two or more tables based on a related column."}, {"cat": "Database Management Systems", "q": "What is an inner join?", "a": "A join that returns only rows with matching values in both tables."}, {"cat": "Database Management Systems", "q": "What is a left join?", "a": "A join that returns all rows from the left table and matching rows from the right table, filling unmatched with NULL."}, {"cat": "Database Management Systems", "q": "What is a right join?", "a": "A join that returns all rows from the right table and matching rows from the left table."}, {"cat": "Database Management Systems", "q": "What is a full outer join?", "a": "A join that returns all rows from both tables, matching them where possible and filling unmatched with NULL."}, {"cat": "Database Management Systems", "q": "What is a transaction in DBMS?", "a": "A sequence of database operations treated as a single logical unit of work."}, {"cat": "Database Management Systems", "q": "What are ACID properties?", "a": "Atomicity, Consistency, Isolation, and Durability, the properties that guarantee reliable database transactions."}, {"cat": "Database Management Systems", "q": "What is atomicity?", "a": "The property ensuring a transaction is fully completed or not executed at all."}, {"cat": "Database Management Systems", "q": "What is consistency in ACID?", "a": "The property ensuring a transaction brings the database from one valid state to another."}, {"cat": "Database Management Systems", "q": "What is isolation in ACID?", "a": "The property ensuring concurrent transactions do not interfere with each other."}, {"cat": "Database Management Systems", "q": "What is durability in ACID?", "a": "The property ensuring completed transactions remain saved even after a system failure."}, {"cat": "Database Management Systems", "q": "What is a query?", "a": "A request to retrieve or manipulate data in a database, usually written in SQL."}, {"cat": "Database Management Systems", "q": "What is an index in a database?", "a": "A data structure that improves the speed of data retrieval operations on a table."}, {"cat": "Database Management Systems", "q": "What is a view in SQL?", "a": "A virtual table based on the result of a stored SQL query."}, {"cat": "Database Management Systems", "q": "What is a stored procedure?", "a": "A precompiled set of SQL statements stored in the database that can be executed as a unit."}, {"cat": "Database Management Systems", "q": "What is a trigger in DBMS?", "a": "A stored procedure that automatically executes in response to certain events on a table."}, {"cat": "Database Management Systems", "q": "What is a schema?", "a": "The structure or blueprint that defines how data is organized in a database."}, {"cat": "Database Management Systems", "q": "What is DDL?", "a": "Data Definition Language, SQL commands used to define database structures like CREATE, ALTER, and DROP."}, {"cat": "Database Management Systems", "q": "What is DML?", "a": "Data Manipulation Language, SQL commands used to manipulate data such as INSERT, UPDATE, and DELETE."}, {"cat": "Database Management Systems", "q": "What is DCL?", "a": "Data Control Language, SQL commands used to control access to data, such as GRANT and REVOKE."}, {"cat": "Database Management Systems", "q": "What is TCL?", "a": "Transaction Control Language, SQL commands used to manage transactions, such as COMMIT and ROLLBACK."}, {"cat": "Database Management Systems", "q": "What is a candidate key?", "a": "A minimal set of attributes that can uniquely identify a row in a table."}, {"cat": "Database Management Systems", "q": "What is a composite key?", "a": "A primary key made up of two or more columns combined to uniquely identify a row."}, {"cat": "Database Management Systems", "q": "What is referential integrity?", "a": "A rule ensuring that foreign key values always match a valid primary key in the related table."}, {"cat": "Database Management Systems", "q": "What is data redundancy?", "a": "The unnecessary duplication of data within a database."}, {"cat": "Database Management Systems", "q": "What is a deadlock in DBMS?", "a": "A situation where two or more transactions are waiting indefinitely for each other to release locks."}, {"cat": "Database Management Systems", "q": "What is concurrency control?", "a": "Techniques used to manage simultaneous operations on a database without conflicts."}, {"cat": "Database Management Systems", "q": "What is a NoSQL database?", "a": "A non-relational database designed for flexible schemas and horizontal scalability, such as MongoDB."}, {"cat": "Database Management Systems", "q": "What is the difference between SQL and NoSQL?", "a": "SQL databases use structured tables and schemas, while NoSQL databases use flexible formats like documents, key-value pairs, or graphs."}, {"cat": "Database Management Systems", "q": "What is a clustered index?", "a": "An index that determines the physical order of data storage in a table."}, {"cat": "Database Management Systems", "q": "What is a non-clustered index?", "a": "An index that maintains a separate structure from the data, pointing to its location."}, {"cat": "Database Management Systems", "q": "What is data warehousing?", "a": "The process of collecting and managing data from various sources for analysis and reporting."}, {"cat": "Database Management Systems", "q": "What is OLTP?", "a": "Online Transaction Processing, a system designed to manage transactional, day-to-day data operations."}, {"cat": "Database Management Systems", "q": "What is OLAP?", "a": "Online Analytical Processing, a system designed for complex queries and analysis of large datasets."}, {"cat": "Database Management Systems", "q": "What is an ER diagram?", "a": "Entity-Relationship diagram, a visual representation of entities and their relationships in a database."}, {"cat": "Database Management Systems", "q": "What is an entity in DBMS?", "a": "An object or concept about which data is stored, represented as a table."}, {"cat": "Database Management Systems", "q": "What is an attribute in DBMS?", "a": "A property or characteristic of an entity, represented as a column in a table."}, {"cat": "Database Management Systems", "q": "What is a many-to-many relationship?", "a": "A relationship where multiple records in one table relate to multiple records in another, often resolved with a junction table."}, {"cat": "Database Management Systems", "q": "What is database sharding?", "a": "Splitting a large database into smaller, faster, more manageable pieces called shards, often distributed across servers."}, {"cat": "Operating Systems", "q": "What is an operating system?", "a": "System software that manages hardware resources and provides services for computer programs."}, {"cat": "Operating Systems", "q": "What is a process?", "a": "A program in execution, along with its current state, memory, and resources."}, {"cat": "Operating Systems", "q": "What is a thread?", "a": "The smallest unit of execution within a process that can run concurrently with other threads."}, {"cat": "Operating Systems", "q": "What is multitasking?", "a": "The ability of an operating system to execute multiple tasks or processes seemingly simultaneously."}, {"cat": "Operating Systems", "q": "What is multithreading?", "a": "The ability to execute multiple threads within a single process concurrently."}, {"cat": "Operating Systems", "q": "What is a process scheduler?", "a": "A component of the OS that decides which process runs on the CPU at any given time."}, {"cat": "Operating Systems", "q": "What is context switching?", "a": "The process of saving the state of a running process and loading the state of another to switch execution."}, {"cat": "Operating Systems", "q": "What is a deadlock?", "a": "A situation where two or more processes are blocked forever, each waiting for a resource held by the other."}, {"cat": "Operating Systems", "q": "What are the four conditions for deadlock?", "a": "Mutual exclusion, hold and wait, no preemption, and circular wait."}, {"cat": "Operating Systems", "q": "What is starvation in OS?", "a": "A situation where a process is perpetually denied the resources it needs to proceed."}, {"cat": "Operating Systems", "q": "What is a race condition?", "a": "A situation where the outcome of a program depends on the unpredictable timing of concurrent processes."}, {"cat": "Operating Systems", "q": "What is mutual exclusion?", "a": "A property ensuring that only one process can access a critical resource at a time."}, {"cat": "Operating Systems", "q": "What is a semaphore?", "a": "A synchronization tool that uses a counter to control access to shared resources by multiple processes."}, {"cat": "Operating Systems", "q": "What is a mutex?", "a": "A locking mechanism that allows only one thread to access a resource at a time."}, {"cat": "Operating Systems", "q": "What is virtual memory?", "a": "A memory management technique that gives an application the illusion of a large, continuous memory space using disk storage."}, {"cat": "Operating Systems", "q": "What is paging?", "a": "A memory management scheme that divides memory into fixed-size blocks called pages to avoid fragmentation."}, {"cat": "Operating Systems", "q": "What is segmentation?", "a": "A memory management scheme that divides memory into variable-sized segments based on logical divisions of a program."}, {"cat": "Operating Systems", "q": "What is thrashing?", "a": "A condition where excessive paging causes the system to spend more time swapping data than executing processes."}, {"cat": "Operating Systems", "q": "What is a page fault?", "a": "An event that occurs when a program accesses a page not currently loaded in physical memory."}, {"cat": "Operating Systems", "q": "What is fragmentation?", "a": "The inefficient use of memory caused by scattered free space, either internal or external."}, {"cat": "Operating Systems", "q": "What is internal fragmentation?", "a": "Wasted memory within an allocated block because the block is larger than needed."}, {"cat": "Operating Systems", "q": "What is external fragmentation?", "a": "Wasted memory scattered as small free blocks between allocated blocks, none large enough to satisfy new requests."}, {"cat": "Operating Systems", "q": "What is FCFS scheduling?", "a": "First-Come, First-Served, a scheduling algorithm that executes processes in the order they arrive."}, {"cat": "Operating Systems", "q": "What is round-robin scheduling?", "a": "A scheduling algorithm that gives each process a fixed time slice in a cyclic order."}, {"cat": "Operating Systems", "q": "What is shortest job first scheduling?", "a": "A scheduling algorithm that selects the process with the smallest execution time next."}, {"cat": "Operating Systems", "q": "What is priority scheduling?", "a": "A scheduling algorithm that assigns CPU time based on the priority level of each process."}, {"cat": "Operating Systems", "q": "What is a kernel?", "a": "The core part of an operating system that manages system resources and communication between hardware and software."}, {"cat": "Operating Systems", "q": "What is a system call?", "a": "A mechanism that allows a program to request a service from the operating system's kernel."}, {"cat": "Operating Systems", "q": "What is an interrupt?", "a": "A signal sent to the processor that temporarily halts current execution to handle a higher-priority event."}, {"cat": "Operating Systems", "q": "What is a file system?", "a": "The method an OS uses to organize, store, and retrieve files on storage devices."}, {"cat": "Operating Systems", "q": "What is a directory?", "a": "A structure used to organize files into a hierarchy within a file system."}, {"cat": "Operating Systems", "q": "What is a shell?", "a": "A user interface that allows users to interact with the operating system, typically via commands."}, {"cat": "Operating Systems", "q": "What is booting?", "a": "The process of starting up a computer and loading the operating system into memory."}, {"cat": "Operating Systems", "q": "What is a bootloader?", "a": "A small program that loads the operating system into memory during startup."}, {"cat": "Operating Systems", "q": "What is a device driver?", "a": "Software that allows the operating system to communicate with hardware devices."}, {"cat": "Operating Systems", "q": "What is spooling?", "a": "A process where data is temporarily stored for a device to process at its own pace, like a print queue."}, {"cat": "Operating Systems", "q": "What is a zombie process?", "a": "A process that has completed execution but still has an entry in the process table."}, {"cat": "Operating Systems", "q": "What is an orphan process?", "a": "A process whose parent has terminated while it continues to run."}, {"cat": "Operating Systems", "q": "What is inter-process communication?", "a": "Mechanisms that allow processes to exchange data and synchronize their actions."}, {"cat": "Operating Systems", "q": "What are pipes in OS?", "a": "A form of inter-process communication that allows data to flow from one process to another in one direction."}, {"cat": "Operating Systems", "q": "What is a critical section?", "a": "A part of a program that accesses shared resources and must not be executed by more than one process at a time."}, {"cat": "Operating Systems", "q": "What is preemptive scheduling?", "a": "A scheduling method where the OS can interrupt a running process to assign the CPU to another."}, {"cat": "Operating Systems", "q": "What is non-preemptive scheduling?", "a": "A scheduling method where a running process keeps the CPU until it voluntarily releases it."}, {"cat": "Operating Systems", "q": "What is the difference between process and thread?", "a": "A process is an independent program with its own memory space, while a thread is a lightweight unit within a process sharing its memory."}, {"cat": "Operating Systems", "q": "What is a real-time operating system?", "a": "An OS designed to process data and respond within a guaranteed, strict time constraint."}, {"cat": "Operating Systems", "q": "What is dual booting?", "a": "Installing two operating systems on a single computer, allowing the user to choose which to run at startup."}, {"cat": "Operating Systems", "q": "What is a distributed operating system?", "a": "An OS that manages a group of independent computers and makes them appear as a single system."}, {"cat": "Operating Systems", "q": "What is cache memory?", "a": "A small, fast memory located close to the CPU that stores frequently accessed data to speed up processing."}, {"cat": "Operating Systems", "q": "What is swapping in OS?", "a": "Moving processes between main memory and disk to free up RAM for other processes."}, {"cat": "Operating Systems", "q": "What is the difference between logical and physical address?", "a": "A logical address is generated by the CPU during a program's execution, while a physical address refers to an actual location in memory."}, {"cat": "Computer Networks", "q": "What is a computer network?", "a": "A collection of interconnected devices that can communicate and share resources."}, {"cat": "Computer Networks", "q": "What is the internet?", "a": "A global network of interconnected computer networks that communicate using standardized protocols."}, {"cat": "Computer Networks", "q": "What is an IP address?", "a": "A unique numerical identifier assigned to each device on a network for communication."}, {"cat": "Computer Networks", "q": "What is IPv4?", "a": "A 32-bit addressing scheme used to identify devices on a network, allowing about 4.3 billion addresses."}, {"cat": "Computer Networks", "q": "What is IPv6?", "a": "A 128-bit addressing scheme designed to replace IPv4 and provide a vastly larger address space."}, {"cat": "Computer Networks", "q": "What is a MAC address?", "a": "A unique hardware identifier assigned to a network interface card by its manufacturer."}, {"cat": "Computer Networks", "q": "What is a router?", "a": "A networking device that forwards data packets between different networks."}, {"cat": "Computer Networks", "q": "What is a network switch?", "a": "A device that connects devices within a network and forwards data based on MAC addresses."}, {"cat": "Computer Networks", "q": "What is a hub?", "a": "A basic networking device that broadcasts incoming data to all connected devices."}, {"cat": "Computer Networks", "q": "What is a firewall?", "a": "A security system that monitors and controls incoming and outgoing network traffic based on rules."}, {"cat": "Computer Networks", "q": "What is the OSI model?", "a": "A conceptual framework with seven layers that standardizes how different networking systems communicate."}, {"cat": "Computer Networks", "q": "What are the seven layers of the OSI model?", "a": "Physical, Data Link, Network, Transport, Session, Presentation, and Application."}, {"cat": "Computer Networks", "q": "What is the TCP/IP model?", "a": "A four-layer networking model consisting of Network Access, Internet, Transport, and Application layers."}, {"cat": "Computer Networks", "q": "What is TCP?", "a": "Transmission Control Protocol, a connection-oriented protocol that ensures reliable, ordered data delivery."}, {"cat": "Computer Networks", "q": "What is UDP?", "a": "User Datagram Protocol, a connectionless protocol that sends data without guaranteeing delivery or order."}, {"cat": "Computer Networks", "q": "What is the difference between TCP and UDP?", "a": "TCP is reliable and connection-oriented, while UDP is faster but does not guarantee delivery."}, {"cat": "Computer Networks", "q": "What is HTTP?", "a": "HyperText Transfer Protocol, used for transmitting web pages over the internet."}, {"cat": "Computer Networks", "q": "What is HTTPS?", "a": "A secure version of HTTP that encrypts data using SSL or TLS."}, {"cat": "Computer Networks", "q": "What is DNS?", "a": "Domain Name System, a service that translates human-readable domain names into IP addresses."}, {"cat": "Computer Networks", "q": "What is a port number?", "a": "A number used to identify a specific process or service on a networked device."}, {"cat": "Computer Networks", "q": "What is a subnet?", "a": "A smaller network created by dividing a larger network into segments."}, {"cat": "Computer Networks", "q": "What is subnetting?", "a": "The process of dividing a network into smaller subnetworks for better management and security."}, {"cat": "Computer Networks", "q": "What is a gateway?", "a": "A device that connects two different networks, often acting as an entry or exit point for data."}, {"cat": "Computer Networks", "q": "What is bandwidth?", "a": "The maximum rate of data transfer across a network path, usually measured in bits per second."}, {"cat": "Computer Networks", "q": "What is latency?", "a": "The time delay between sending and receiving data over a network."}, {"cat": "Computer Networks", "q": "What is packet switching?", "a": "A method of data transmission where data is broken into packets and routed independently."}, {"cat": "Computer Networks", "q": "What is circuit switching?", "a": "A method of communication where a dedicated path is established between two devices for the duration of the session."}, {"cat": "Computer Networks", "q": "What is a LAN?", "a": "Local Area Network, a network confined to a small geographic area like an office or home."}, {"cat": "Computer Networks", "q": "What is a WAN?", "a": "Wide Area Network, a network that spans a large geographic area, such as the internet."}, {"cat": "Computer Networks", "q": "What is a MAN?", "a": "Metropolitan Area Network, a network that spans a city or large campus."}, {"cat": "Computer Networks", "q": "What is a VPN?", "a": "Virtual Private Network, a service that creates a secure, encrypted connection over a public network."}, {"cat": "Computer Networks", "q": "What is FTP?", "a": "File Transfer Protocol, used to transfer files between a client and server over a network."}, {"cat": "Computer Networks", "q": "What is SMTP?", "a": "Simple Mail Transfer Protocol, used to send emails between servers."}, {"cat": "Computer Networks", "q": "What is a proxy server?", "a": "A server that acts as an intermediary between a client and other servers."}, {"cat": "Computer Networks", "q": "What is bandwidth throttling?", "a": "Intentionally slowing down internet service for certain types of traffic."}, {"cat": "Computer Networks", "q": "What is a network topology?", "a": "The arrangement of nodes and connections in a network, such as star, bus, or ring."}, {"cat": "Computer Networks", "q": "What is star topology?", "a": "A network layout where all devices connect to a central hub or switch."}, {"cat": "Computer Networks", "q": "What is bus topology?", "a": "A network layout where all devices share a single communication line."}, {"cat": "Computer Networks", "q": "What is ring topology?", "a": "A network layout where each device connects to exactly two others, forming a circular path."}, {"cat": "Computer Networks", "q": "What is mesh topology?", "a": "A network layout where devices are interconnected, with multiple paths between nodes."}, {"cat": "Computer Networks", "q": "What is the three-way handshake in TCP?", "a": "A process of establishing a TCP connection using SYN, SYN-ACK, and ACK packets."}, {"cat": "Computer Networks", "q": "What is a socket?", "a": "An endpoint for sending and receiving data across a network, identified by an IP address and port number."}, {"cat": "Computer Networks", "q": "What is a DNS server?", "a": "A server that stores and resolves domain names to their corresponding IP addresses."}, {"cat": "Computer Networks", "q": "What is NAT?", "a": "Network Address Translation, a method of remapping private IP addresses to a public IP address."}, {"cat": "Computer Networks", "q": "What is the difference between MAC and IP address?", "a": "A MAC address identifies a device's hardware, while an IP address identifies its location on a network."}, {"cat": "Computer Networks", "q": "What is a checksum in networking?", "a": "A value used to verify the integrity of transmitted data by detecting errors."}, {"cat": "Computer Networks", "q": "What is Wi-Fi?", "a": "A wireless networking technology that allows devices to connect to a network using radio waves."}, {"cat": "Computer Networks", "q": "What is the difference between bandwidth and throughput?", "a": "Bandwidth is the theoretical maximum data rate, while throughput is the actual data rate achieved."}, {"cat": "Computer Networks", "q": "What is an ISP?", "a": "Internet Service Provider, a company that provides individuals and organizations access to the internet."}, {"cat": "Computer Networks", "q": "What is packet loss?", "a": "The failure of data packets to reach their destination, often causing degraded network performance."}, {"cat": "Web Development", "q": "What is HTML?", "a": "HyperText Markup Language, used to structure content on web pages."}, {"cat": "Web Development", "q": "What is CSS?", "a": "Cascading Style Sheets, used to style and layout HTML elements."}, {"cat": "Web Development", "q": "What is JavaScript?", "a": "A programming language used to add interactivity and dynamic behavior to web pages."}, {"cat": "Web Development", "q": "What is the DOM?", "a": "Document Object Model, a programming interface representing the structure of a web page as a tree of objects."}, {"cat": "Web Development", "q": "What is a tag in HTML?", "a": "An element marker like <p> or <div> used to define the structure of content."}, {"cat": "Web Development", "q": "What is an HTML attribute?", "a": "Additional information added to an HTML tag, such as class or id."}, {"cat": "Web Development", "q": "What is a class selector in CSS?", "a": "A CSS selector that targets elements with a specific class attribute, denoted by a dot."}, {"cat": "Web Development", "q": "What is an ID selector in CSS?", "a": "A CSS selector that targets a single element with a specific id attribute, denoted by a hash symbol."}, {"cat": "Web Development", "q": "What is responsive design?", "a": "A web design approach that makes pages render well across different screen sizes and devices."}, {"cat": "Web Development", "q": "What is a media query in CSS?", "a": "A CSS feature that applies styles conditionally based on device characteristics like screen width."}, {"cat": "Web Development", "q": "What is Flexbox?", "a": "A CSS layout module that arranges items in a flexible, one-dimensional layout."}, {"cat": "Web Development", "q": "What is CSS Grid?", "a": "A CSS layout system that arranges items in a two-dimensional grid of rows and columns."}, {"cat": "Web Development", "q": "What is an API?", "a": "Application Programming Interface, a set of rules that allows different software to communicate with each other."}, {"cat": "Web Development", "q": "What is a REST API?", "a": "Representational State Transfer, an architectural style for designing networked applications using standard HTTP methods."}, {"cat": "Web Development", "q": "What is JSON?", "a": "JavaScript Object Notation, a lightweight data format used for exchanging data between systems."}, {"cat": "Web Development", "q": "What is AJAX?", "a": "Asynchronous JavaScript and XML, a technique for updating parts of a web page without reloading it."}, {"cat": "Web Development", "q": "What is a front-end framework?", "a": "A collection of pre-written code and tools used to build the user interface of a web application, such as React or Vue."}, {"cat": "Web Development", "q": "What is a back-end framework?", "a": "A collection of tools used to build the server-side logic of an application, such as Express or Django."}, {"cat": "Web Development", "q": "What is Node.js?", "a": "A runtime environment that allows JavaScript to run outside a browser, typically on a server."}, {"cat": "Web Development", "q": "What is React?", "a": "A JavaScript library for building user interfaces using reusable components."}, {"cat": "Web Development", "q": "What is a component in React?", "a": "A reusable, self-contained piece of UI that can manage its own state and logic."}, {"cat": "Web Development", "q": "What is state in React?", "a": "Data that determines a component's behavior and rendering, which can change over time."}, {"cat": "Web Development", "q": "What is props in React?", "a": "Data passed from a parent component to a child component."}, {"cat": "Web Development", "q": "What is a web server?", "a": "Software that handles HTTP requests from clients and serves web content in response."}, {"cat": "Web Development", "q": "What is a client-server model?", "a": "A network architecture where clients request services and servers provide them."}, {"cat": "Web Development", "q": "What is CRUD?", "a": "Create, Read, Update, Delete, the four basic operations performed on data in a system."}, {"cat": "Web Development", "q": "What is a cookie in web development?", "a": "A small piece of data stored on a user's browser to remember information between requests."}, {"cat": "Web Development", "q": "What is session management?", "a": "The process of maintaining a user's state and data across multiple requests on a website."}, {"cat": "Web Development", "q": "What is CORS?", "a": "Cross-Origin Resource Sharing, a mechanism that allows or restricts resources to be requested from a different domain."}, {"cat": "Web Development", "q": "What is a URL?", "a": "Uniform Resource Locator, the address used to access a resource on the internet."}, {"cat": "Web Development", "q": "What is a web framework?", "a": "A software framework that provides tools and libraries for building web applications more efficiently."}, {"cat": "Web Development", "q": "What is version control?", "a": "A system that tracks and manages changes to code over time, such as Git."}, {"cat": "Web Development", "q": "What is Git?", "a": "A distributed version control system used to track changes in source code during development."}, {"cat": "Web Development", "q": "What is a repository in Git?", "a": "A storage location for a project's files and their complete version history."}, {"cat": "Web Development", "q": "What is a Git commit?", "a": "A snapshot of changes saved to the repository's history."}, {"cat": "Web Development", "q": "What is a Git branch?", "a": "A separate line of development that allows changes without affecting the main codebase."}, {"cat": "Web Development", "q": "What is a merge conflict?", "a": "A situation that occurs when Git cannot automatically reconcile changes from different branches."}, {"cat": "Web Development", "q": "What is a web browser?", "a": "Software used to access, retrieve, and display content on the World Wide Web."}, {"cat": "Web Development", "q": "What is SEO?", "a": "Search Engine Optimization, techniques used to improve a website's visibility in search engine results."}, {"cat": "Web Development", "q": "What is a single-page application?", "a": "A web application that loads a single HTML page and dynamically updates content without full page reloads."}, {"cat": "Software Engineering", "q": "What is software engineering?", "a": "The discipline of designing, developing, testing, and maintaining software systems systematically."}, {"cat": "Software Engineering", "q": "What is the software development life cycle?", "a": "A structured process for planning, creating, testing, and deploying software."}, {"cat": "Software Engineering", "q": "What is the Waterfall model?", "a": "A linear, sequential software development approach where each phase must be completed before the next begins."}, {"cat": "Software Engineering", "q": "What is Agile methodology?", "a": "An iterative approach to software development that emphasizes flexibility, collaboration, and incremental delivery."}, {"cat": "Software Engineering", "q": "What is Scrum?", "a": "An Agile framework that organizes work into fixed-length iterations called sprints."}, {"cat": "Software Engineering", "q": "What is a sprint in Scrum?", "a": "A short, fixed period of time, usually one to four weeks, during which a specific set of work is completed."}, {"cat": "Software Engineering", "q": "What is a use case?", "a": "A description of how a user interacts with a system to achieve a specific goal."}, {"cat": "Software Engineering", "q": "What is requirements gathering?", "a": "The process of collecting and documenting what a software system needs to do."}, {"cat": "Software Engineering", "q": "What is unit testing?", "a": "Testing individual components or functions of a program in isolation."}, {"cat": "Software Engineering", "q": "What is integration testing?", "a": "Testing to ensure different modules or components of a system work together correctly."}, {"cat": "Software Engineering", "q": "What is system testing?", "a": "Testing the complete, integrated software system to verify it meets requirements."}, {"cat": "Software Engineering", "q": "What is regression testing?", "a": "Re-testing software after changes to ensure existing functionality still works correctly."}, {"cat": "Software Engineering", "q": "What is a bug?", "a": "An error or flaw in software that causes it to behave unexpectedly."}, {"cat": "Software Engineering", "q": "What is a design pattern?", "a": "A general, reusable solution to a common problem in software design."}, {"cat": "Software Engineering", "q": "What is the singleton design pattern?", "a": "A pattern that restricts a class to a single instance and provides a global point of access to it."}, {"cat": "Software Engineering", "q": "What is the MVC pattern?", "a": "Model-View-Controller, a design pattern that separates an application into data, user interface, and control logic."}, {"cat": "Software Engineering", "q": "What is technical debt?", "a": "The implied cost of additional rework caused by choosing an easy solution now instead of a better approach."}, {"cat": "Software Engineering", "q": "What is refactoring?", "a": "The process of restructuring existing code without changing its external behavior to improve readability or performance."}, {"cat": "Software Engineering", "q": "What is a code review?", "a": "The practice of examining code written by another developer to catch errors and improve quality."}, {"cat": "Software Engineering", "q": "What is pair programming?", "a": "A practice where two programmers work together at one workstation, one writing code and the other reviewing it."}, {"cat": "Software Engineering", "q": "What is continuous integration?", "a": "A practice of frequently merging code changes into a shared repository, verified by automated builds and tests."}, {"cat": "Software Engineering", "q": "What is continuous deployment?", "a": "A practice of automatically deploying every code change that passes tests to production."}, {"cat": "Software Engineering", "q": "What is a software requirement specification?", "a": "A document that describes the intended purpose and features of a software system."}, {"cat": "Software Engineering", "q": "What is black-box testing?", "a": "Testing software functionality without knowledge of its internal code structure."}, {"cat": "Software Engineering", "q": "What is white-box testing?", "a": "Testing software with knowledge of its internal code structure and logic."}, {"cat": "Software Engineering", "q": "What is a test case?", "a": "A set of conditions and inputs used to determine whether a software feature works as expected."}, {"cat": "Software Engineering", "q": "What is documentation in software development?", "a": "Written material that explains how software works, is used, or is maintained."}, {"cat": "Software Engineering", "q": "What is a stakeholder in a software project?", "a": "Any person or group with an interest in the outcome of a software project."}, {"cat": "Software Engineering", "q": "What is scalability?", "a": "The ability of a system to handle increasing amounts of work or to be expanded to accommodate growth."}, {"cat": "Software Engineering", "q": "What is a version release?", "a": "A specific packaged snapshot of software made available to users, often numbered like v1.0."}, {"cat": "Computer Architecture", "q": "What is computer architecture?", "a": "The design and organization of a computer's components and how they interact to execute instructions."}, {"cat": "Computer Architecture", "q": "What is the CPU?", "a": "Central Processing Unit, the primary component of a computer that executes instructions."}, {"cat": "Computer Architecture", "q": "What is RAM?", "a": "Random Access Memory, volatile memory used to temporarily store data that the CPU needs while running programs."}, {"cat": "Computer Architecture", "q": "What is ROM?", "a": "Read-Only Memory, non-volatile memory that stores permanent instructions like the boot firmware."}, {"cat": "Computer Architecture", "q": "What is the difference between RAM and ROM?", "a": "RAM is volatile and used for temporary data, while ROM is non-volatile and stores permanent instructions."}, {"cat": "Computer Architecture", "q": "What is a register?", "a": "A small, fast storage location within the CPU used to hold data temporarily during processing."}, {"cat": "Computer Architecture", "q": "What is the ALU?", "a": "Arithmetic Logic Unit, the part of the CPU that performs arithmetic and logical operations."}, {"cat": "Computer Architecture", "q": "What is the control unit?", "a": "The part of the CPU that directs the operation of the processor by interpreting instructions."}, {"cat": "Computer Architecture", "q": "What is clock speed?", "a": "The rate at which a CPU executes instructions, measured in Hertz, or cycles per second."}, {"cat": "Computer Architecture", "q": "What is a bus in computer architecture?", "a": "A communication system that transfers data between components inside a computer."}, {"cat": "Computer Architecture", "q": "What is cache memory in architecture?", "a": "A small, fast memory located near the CPU that stores frequently used data to reduce access time."}, {"cat": "Computer Architecture", "q": "What is pipelining?", "a": "A technique that overlaps the execution of multiple instructions to improve CPU throughput."}, {"cat": "Computer Architecture", "q": "What is a multi-core processor?", "a": "A CPU containing two or more independent processing units, or cores, that can execute instructions simultaneously."}, {"cat": "Computer Architecture", "q": "What is an instruction set?", "a": "The set of commands a CPU can execute, defining its supported operations."}, {"cat": "Computer Architecture", "q": "What is RISC?", "a": "Reduced Instruction Set Computer, a CPU design with a small, simplified set of instructions for faster execution."}, {"cat": "Computer Architecture", "q": "What is CISC?", "a": "Complex Instruction Set Computer, a CPU design with a larger set of complex instructions."}, {"cat": "Computer Architecture", "q": "What is von Neumann architecture?", "a": "A computer architecture where program instructions and data share the same memory and bus."}, {"cat": "Computer Architecture", "q": "What is Harvard architecture?", "a": "A computer architecture with separate memory and buses for instructions and data."}, {"cat": "Computer Architecture", "q": "What is a motherboard?", "a": "The main circuit board of a computer that connects and allows communication between all components."}, {"cat": "Computer Architecture", "q": "What is an embedded system?", "a": "A specialized computer system designed to perform a dedicated function within a larger device."}, {"cat": "Computer Architecture", "q": "What is a GPU?", "a": "Graphics Processing Unit, a specialized processor designed to accelerate rendering of images and parallel computations."}, {"cat": "Computer Architecture", "q": "What is firmware?", "a": "Low-level software permanently programmed into a hardware device to control its basic functions."}, {"cat": "Computer Architecture", "q": "What is a bit?", "a": "The smallest unit of data in computing, representing a binary value of 0 or 1."}, {"cat": "Computer Architecture", "q": "What is a byte?", "a": "A unit of digital information typically consisting of 8 bits."}, {"cat": "Computer Architecture", "q": "What is overclocking?", "a": "Increasing a computer component's clock rate beyond its manufacturer-specified limit for better performance."}]</script>
+
+<!-- ─── JAVASCRIPT ─── -->
+<script>
+  /* ─── HERO PARTICLE CANVAS ─── */
+  (function () {
+    const canvas = document.getElementById('hero-canvas');
+    const ctx    = canvas.getContext('2d');
+    let W, H, particles = [], mouse = { x: -9999, y: -9999 };
+
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+
+    function Particle() {
+      this.reset = function() {
+        this.x  = Math.random() * W;
+        this.y  = Math.random() * H;
+        this.r  = Math.random() * 1.4 + 0.3;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.life    = Math.random();
+        this.maxLife = 0.4 + Math.random() * 0.5;
+        this.hue = Math.random() > 0.5 ? 260 : 220;
+      };
+      this.reset();
+    }
+
+    function init() {
+      resize();
+      particles = [];
+      const count = Math.floor((W * H) / 8000);
+      for (let i = 0; i < count; i++) particles.push(new Particle());
+      window.addEventListener('resize', resize);
+    }
+
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      /* ── subtle gradient background wash ── */
+      const grad = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W * 0.8);
+      grad.addColorStop(0, 'rgba(20,10,40,0.15)');
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life += 0.003;
+
+        /* mouse repulsion */
+        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          const force = (120 - dist) / 120 * 0.4;
+          p.vx += (dx / dist) * force;
+          p.vy += (dy / dist) * force;
+        }
+        /* dampen */
+        p.vx *= 0.99; p.vy *= 0.99;
+
+        if (p.x < 0 || p.x > W || p.y < 0 || p.y > H || p.life > p.maxLife) p.reset();
+
+        const alpha = Math.sin(p.life / p.maxLife * Math.PI) * 0.6;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue}, 70%, 70%, ${alpha})`;
+        ctx.fill();
+      }
+
+      /* ── connecting lines ── */
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const a = particles[i], b = particles[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const d  = dx*dx + dy*dy;
+          if (d < 12000) {
+            const alpha = (1 - d / 12000) * 0.06;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(167,139,250,${alpha})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    init();
+    draw();
+  })();
+
+  /* ─── SCROLL REVEAL ─── */
+  (function () {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal, .how-step').forEach(el => observer.observe(el));
+  })();
+
+  /* ─── COUNTER ANIMATION ─── */
+  (function () {
+    const counters = document.querySelectorAll('[data-count]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el  = e.target;
+        const end = parseInt(el.dataset.count);
+        const dur = 1800;
+        const start = performance.now();
+        function step(now) {
+          const t   = Math.min(1, (now - start) / dur);
+          const ease = 1 - Math.pow(1 - t, 3);
+          el.textContent = Math.round(ease * end) + (end >= 50 ? (end === 40 ? '<' : '+') : '%');
+          if (end === 40) el.textContent = '<' + Math.round(ease * end);
+          if (t < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+        observer.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(c => observer.observe(c));
+  })();
+
+  /* ─── NAVBAR SCROLL TINT ─── */
+  (function () {
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        nav.style.background = 'rgba(0,0,0,0.88)';
+      } else {
+        nav.style.background = 'rgba(0,0,0,0.72)';
+      }
+    }, { passive: true });
+  })();
+
+  /* ─── 3D TILT ON MODEL CARD ─── */
+  (function () {
+    const card = document.querySelector('.model-card');
+    if (!card) return;
+    card.parentElement.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const cx   = rect.left + rect.width  / 2;
+      const cy   = rect.top  + rect.height / 2;
+      const rx   = (e.clientY - cy) / 18;
+      const ry   = -(e.clientX - cx) / 18;
+      card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(20px)`;
+    });
+    card.parentElement.addEventListener('mouseleave', () => {
+      card.style.transform = 'rotateY(-6deg) rotateX(3deg)';
+    });
+  })();
+
+  /* ─── QUESTION FORM ─── */
+  (function () {
+    const form       = document.getElementById('question-form');
+    const success    = document.getElementById('form-success');
+    const submitBtn  = document.getElementById('submit-btn');
+    const textarea   = document.getElementById('q-body');
+    const charNum    = document.getElementById('char-num');
+    const charWrap   = document.querySelector('.char-count');
+    const MAX        = 500;
+
+    /* char counter */
+    textarea && textarea.addEventListener('input', () => {
+      const len = textarea.value.length;
+      charNum.textContent = len;
+      if (len > MAX) {
+        charWrap.classList.add('over');
+        textarea.value = textarea.value.slice(0, MAX);
+        charNum.textContent = MAX;
+      } else {
+        charWrap.classList.remove('over');
+      }
+    });
+
+    /* live validation clear */
+    document.querySelectorAll('.form-input').forEach(el => {
+      el.addEventListener('input', () => el.classList.remove('error'));
+    });
+
+    function validate() {
+      let ok = true;
+      const name  = document.getElementById('q-name');
+      const email = document.getElementById('q-email');
+      const topic = document.getElementById('q-topic');
+      const body  = document.getElementById('q-body');
+
+      if (!name.value.trim())  { name.classList.add('error');  name.focus();  ok = false; }
+      if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+        email.classList.add('error');
+        if (ok) email.focus();
+        ok = false;
+      }
+      if (!topic.value) { topic.classList.add('error'); ok = false; }
+      if (!body.value.trim()) { body.classList.add('error'); if (ok) body.focus(); ok = false; }
+      return ok;
+    }
+
+    form && form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+
+      submitBtn.disabled = true;
+      submitBtn.querySelector('.btn-submit-label').textContent = 'Sending…';
+
+      /* Simulate async submission */
+      setTimeout(() => {
+        form.style.display = 'none';
+        success.style.display = 'block';
+      }, 900);
+    });
+  })();
+
+  window.resetForm = function () {
+    const form    = document.getElementById('question-form');
+    const success = document.getElementById('form-success');
+    const btn     = document.getElementById('submit-btn');
+    form.reset();
+    document.getElementById('char-num').textContent = '0';
+    btn.disabled = false;
+    btn.querySelector('.btn-submit-label').textContent = 'Submit Question';
+    success.style.display = 'none';
+    form.style.display    = 'flex';
+  };
+
+  /* ─── SMOOTH ANCHOR SCROLL ─── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }); 
+
+  /* ─── DEMO INPUT INTERACTIVITY ─── */
+  (function () {
+    const field  = document.querySelector('.demo-input-field');
+    const btn    = document.querySelector('.demo-send');
+    if (!field || !btn) return;
+    field.addEventListener('focus', () => {
+      field.style.borderColor = 'rgba(167,139,250,0.4)';
+      field.style.color = 'rgba(245,245,247,0.8)';
+    });
+    field.addEventListener('blur', () => {
+      field.style.borderColor = '';
+      field.style.color = '';
+    });
+  })();
+
+  /* ─── CS Q&A KNOWLEDGE BASE ─── */
+  (function () {
+    let QA_DATA = [];
+    try {
+      QA_DATA = JSON.parse(document.getElementById('qa-data-script').textContent);
+    } catch (err) {
+      console.error('Failed to load Q&A data', err);
+      QA_DATA = [];
+    }
+
+    const totalCountEl = document.getElementById('qa-total-count');
+    if (totalCountEl) totalCountEl.textContent = QA_DATA.length;
+
+    const STOPWORDS = new Set(['what','is','a','an','the','of','in','on','to','and','or','does','do','how',
+      'why','are','was','were','be','it','its','for','with','you','your','can','used','use','between',
+      'difference','explain','define','definition','mean','meaning']);
+
+    function normalize(str) {
+      return (str || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .split(/\s+/)
+        .filter(Boolean);
+    }
+
+    function keywordSet(str) {
+      return new Set(normalize(str).filter(w => !STOPWORDS.has(w) && w.length > 1));
+    }
+
+    // Precompute keyword sets for performance
+    QA_DATA.forEach(item => { item._kw = keywordSet(item.q); });
+
+    function scoreMatch(inputWords, item) {
+      if (inputWords.size === 0) return 0;
+      let overlap = 0;
+      inputWords.forEach(w => { if (item._kw.has(w)) overlap++; });
+      // Jaccard-ish score, weighted toward covering the input query
+      const union = new Set([...inputWords, ...item._kw]).size;
+      return union === 0 ? 0 : overlap / inputWords.size + overlap / union;
+    }
+
+    function findMatches(query, limit) {
+      const inputWords = keywordSet(query);
+      const qLower = query.trim().toLowerCase();
+
+      // exact question match first
+      const exact = QA_DATA.find(item => item.q.toLowerCase() === qLower);
+      if (exact) return [exact];
+
+      if (inputWords.size === 0) return [];
+
+      const scored = QA_DATA
+        .map(item => ({ item, score: scoreMatch(inputWords, item) }))
+        .filter(x => x.score > 0)
+        .sort((a, b) => b.score - a.score);
+
+      return scored.slice(0, limit).map(x => x.item);
+    }
+
+    const input        = document.getElementById('qa-input');
+    const askBtn       = document.getElementById('qa-ask-btn');
+    const suggestBox   = document.getElementById('qa-suggestions');
+    const answerCard   = document.getElementById('qa-answer-card');
+    const noMatchBox   = document.getElementById('qa-no-match');
+    const categoryTag  = document.getElementById('qa-category-tag');
+    const questionEcho = document.getElementById('qa-question-echo');
+    const answerText   = document.getElementById('qa-answer-text');
+
+    function showAnswer(item) {
+      suggestBox.style.display = 'none';
+      noMatchBox.style.display = 'none';
+      categoryTag.textContent  = item.cat;
+      questionEcho.textContent = item.q;
+      answerText.textContent   = item.a;
+      answerCard.style.display = 'block';
+    }
+
+    function showNoMatch() {
+      answerCard.style.display = 'none';
+      suggestBox.style.display = 'none';
+      noMatchBox.style.display = 'block';
+    }
+
+    function renderSuggestions(matches) {
+      answerCard.style.display = 'none';
+      noMatchBox.style.display = 'none';
+
+      if (!matches.length) {
+        suggestBox.style.display = 'none';
+        return;
+      }
+
+      suggestBox.innerHTML = '';
+      matches.forEach(item => {
+        const row = document.createElement('div');
+        row.style.cssText = 'padding:14px 20px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s;font-size:14px;color:var(--text-secondary);';
+        row.textContent = item.q;
+        row.addEventListener('mouseenter', () => row.style.background = 'var(--surface-2)');
+        row.addEventListener('mouseleave', () => row.style.background = 'transparent');
+        row.addEventListener('click', () => {
+          input.value = item.q;
+          showAnswer(item);
+        });
+        suggestBox.appendChild(row);
+      });
+      suggestBox.style.display = 'block';
+    }
+
+    function handleAsk() {
+      const query = input.value.trim();
+      if (!query) return;
+      const matches = findMatches(query, 5);
+      if (!matches.length) {
+        showNoMatch();
+        return;
+      }
+      // If the top match is a strong/exact hit, show the answer directly
+      const inputWords = keywordSet(query);
+      const topScore = scoreMatch(inputWords, matches[0]);
+      if (matches.length === 1 || topScore >= 1.3 || query.toLowerCase() === matches[0].q.toLowerCase()) {
+        showAnswer(matches[0]);
+      } else {
+        renderSuggestions(matches);
+      }
+    }
+
+    askBtn && askBtn.addEventListener('click', handleAsk);
+    input && input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); handleAsk(); }
+    });
+
+    // live-as-you-type suggestions (debounced)
+    let debounceTimer;
+    input && input.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      const query = input.value.trim();
+      if (!query) {
+        suggestBox.style.display = 'none';
+        answerCard.style.display = 'none';
+        noMatchBox.style.display = 'none';
+        return;
+      }
+      debounceTimer = setTimeout(() => {
+        const matches = findMatches(query, 6);
+        if (matches.length) renderSuggestions(matches);
+        else suggestBox.style.display = 'none';
+      }, 180);
+    });
+
+    // Hide suggestions on outside click
+    document.addEventListener('click', (e) => {
+      if (!suggestBox.contains(e.target) && e.target !== input) {
+        suggestBox.style.display = 'none';
+      }
+    });
+
+    /* ─── Category pills + browse list ─── */
+    const categories = [...new Set(QA_DATA.map(i => i.cat))];
+    const pillsWrap   = document.getElementById('qa-category-pills');
+    const listWrap    = document.getElementById('qa-category-list');
+    const listItems   = document.getElementById('qa-category-list-items');
+
+    categories.forEach(cat => {
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.textContent = cat;
+      pill.style.cssText = 'font-size:13px;font-weight:500;color:var(--text-secondary);background:var(--surface-2);border:1px solid var(--border);padding:9px 18px;border-radius:100px;cursor:pointer;transition:all .2s;';
+      pill.addEventListener('mouseenter', () => { pill.style.borderColor = 'rgba(167,139,250,0.4)'; pill.style.color = 'var(--text-primary)'; });
+      pill.addEventListener('mouseleave', () => { pill.style.borderColor = 'var(--border)'; pill.style.color = 'var(--text-secondary)'; });
+      pill.addEventListener('click', () => {
+        answerCard.style.display = 'none';
+        noMatchBox.style.display = 'none';
+        suggestBox.style.display = 'none';
+        const items = QA_DATA.filter(i => i.cat === cat);
+        listItems.innerHTML = '';
+        items.forEach(item => {
+          const row = document.createElement('div');
+          row.style.cssText = 'background:var(--surface-1);padding:18px 24px;cursor:pointer;transition:background .15s;';
+          row.innerHTML = `<div style="font-size:14px;color:var(--text-primary);font-weight:400;">${item.q}</div>`;
+          row.addEventListener('mouseenter', () => row.style.background = 'var(--surface-2)');
+          row.addEventListener('mouseleave', () => row.style.background = 'var(--surface-1)');
+          row.addEventListener('click', () => {
+            input.value = item.q;
+            showAnswer(item);
+            document.getElementById('qa').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+          listItems.appendChild(row);
+        });
+        listWrap.style.display = 'block';
+      });
+      pillsWrap.appendChild(pill);
+    });
+  })();
+</script>
+
+</body>
+</html>
